@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TwitchLib.Api;
 using TwitchLib.Client;
@@ -8,9 +10,13 @@ namespace SonequaBot
 {
     internal class TwitchChatBot
     {
-        ConnectionCredentials connectionCredentials = new ConnectionCredentials(TwitchInfo.BotUsername, TwitchInfo.BotToken);
+        readonly ConnectionCredentials connectionCredentials = new ConnectionCredentials(TwitchInfo.BotUsername, TwitchInfo.BotToken);
         TwitchClient client;
-        TwitchAPI twitchAPI = new TwitchAPI();
+        readonly TwitchAPI twitchAPI = new TwitchAPI();
+
+        string[] BotUsers = new string[] { "sonequabot", "streamelements" };
+
+        List<string> UsersOnline = new List<string>();
 
         public TwitchChatBot()
         {
@@ -28,6 +34,8 @@ namespace SonequaBot
             client.OnWhisperReceived += Client_OnWhisperReceived;
             client.OnUserTimedout += Client_OnUserTimedout;
             client.OnNewSubscriber += Client_OnNewSubscriber;
+            client.OnUserJoined += Client_OnUserJoined;
+            client.OnUserLeft += Client_OnUserLeft;
 
             client.Initialize(connectionCredentials, TwitchInfo.ChannelName);
             client.Connect();
@@ -86,6 +94,28 @@ namespace SonequaBot
         private void Client_OnLog(object sender, TwitchLib.Client.Events.OnLogArgs e)
         {
             Console.WriteLine(e.Data);
+        }
+
+        void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        {
+            if (BotUsers.Contains(e.Username)) return;
+
+            try
+            {
+                client.SendMessage(TwitchInfo.ChannelName, $"Welcome on my channel, { e.Username }");
+
+                UsersOnline.Add(e.Username);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);                   
+            }          
+
+        }
+
+        void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
+        {
+            UsersOnline.Remove(e.Username);
         }
 
         internal void Disconnect()
