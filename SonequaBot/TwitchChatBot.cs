@@ -26,6 +26,13 @@ namespace SonequaBot
         {
             Console.WriteLine("Connecting...");
 
+            twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
+
+            InizializeBot();
+        }
+
+        private void InizializeBot()
+        {
             client = new TwitchClient();
 
             client.OnLog += Client_OnLog;
@@ -39,8 +46,6 @@ namespace SonequaBot
 
             client.Initialize(connectionCredentials, TwitchInfo.ChannelName);
             client.Connect();
-
-            twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
         }
 
         private void Client_OnNewSubscriber(object sender, TwitchLib.Client.Events.OnNewSubscriberArgs e)
@@ -62,7 +67,7 @@ namespace SonequaBot
         {
             if (e.ChatMessage.Message.StartsWith("hi", StringComparison.InvariantCultureIgnoreCase))
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Hey there { e.ChatMessage.DisplayName }");
+                client.SendMessage(TwitchInfo.ChannelName, $"Hey there { e.ChatMessage.DisplayName }.");
             }
             else if (e.ChatMessage.Message.StartsWith("!uptime", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -102,7 +107,7 @@ namespace SonequaBot
 
             try
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Welcome on my channel, { e.Username }");
+                client.SendMessage(TwitchInfo.ChannelName, $"Welcome on my channel, { e.Username }.");
 
                 UsersOnline.Add(e.Username);
             }
@@ -110,7 +115,6 @@ namespace SonequaBot
             {
                 Console.WriteLine(ex.Message);                   
             }          
-
         }
 
         void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
