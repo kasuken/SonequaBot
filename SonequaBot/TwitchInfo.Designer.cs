@@ -95,5 +95,32 @@ namespace SonequaBot {
                 return ResourceManager.GetString("ClientId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://instagram.com/kasuken.
+        /// </summary>
+        internal static string Instagram {
+            get {
+                return ResourceManager.GetString("Instagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://open.spotify.com/user/uerwol/playlist/3u4OyWTr9fTnboGFAt38FU?si=WAxBiqR6RnWKtdpCouc9Cw.
+        /// </summary>
+        internal static string Playlist {
+            get {
+                return ResourceManager.GetString("Playlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a PWA application to find Lyrics on internet.
+        /// </summary>
+        internal static string ProjectDescription {
+            get {
+                return ResourceManager.GetString("ProjectDescription", resourceCulture);
+            }
+        }
     }
 }

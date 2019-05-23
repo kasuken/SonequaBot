@@ -129,4 +129,13 @@
   <data name="ClientId" xml:space="preserve">
     <value>i8rk9m4i976eiaqe6a6smyq0yg0g5l</value>
   </data>
+  <data name="Instagram" xml:space="preserve">
+    <value>https://instagram.com/kasuken</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>https://open.spotify.com/user/uerwol/playlist/3u4OyWTr9fTnboGFAt38FU?si=WAxBiqR6RnWKtdpCouc9Cw</value>
+  </data>
+  <data name="ProjectDescription" xml:space="preserve">
+    <value>a PWA application to find Lyrics on internet</value>
+  </data>
 </root>
