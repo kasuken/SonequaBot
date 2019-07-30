@@ -61,6 +61,15 @@ namespace SonequaBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://dev.to/kasuken.
+        /// </summary>
+        internal static string Blog {
+            get {
+                return ResourceManager.GetString("Blog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to wyw6ncllftchpdqzta43khhp39c23t.
         /// </summary>
         internal static string BotToken {
@@ -115,11 +124,20 @@ namespace SonequaBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a PWA application to find Lyrics on internet.
+        ///   Looks up a localized string similar to Blazor workshop (full day edition).
         /// </summary>
         internal static string ProjectDescription {
             get {
                 return ResourceManager.GetString("ProjectDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://twitter.com/kasuken.
+        /// </summary>
+        internal static string Twitter {
+            get {
+                return ResourceManager.GetString("Twitter", resourceCulture);
             }
         }
     }

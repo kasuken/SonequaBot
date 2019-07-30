@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Blog" xml:space="preserve">
+    <value>https://dev.to/kasuken</value>
+  </data>
   <data name="BotToken" xml:space="preserve">
     <value>wyw6ncllftchpdqzta43khhp39c23t</value>
   </data>
@@ -136,6 +139,9 @@
     <value>https://open.spotify.com/user/uerwol/playlist/3u4OyWTr9fTnboGFAt38FU?si=WAxBiqR6RnWKtdpCouc9Cw</value>
   </data>
   <data name="ProjectDescription" xml:space="preserve">
-    <value>a PWA application to find Lyrics on internet</value>
+    <value>Blazor workshop (full day edition)</value>
+  </data>
+  <data name="Twitter" xml:space="preserve">
+    <value>https://twitter.com/kasuken</value>
   </data>
 </root>

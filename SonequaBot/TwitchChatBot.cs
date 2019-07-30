@@ -90,6 +90,14 @@ namespace SonequaBot
             {
                 client.SendMessage(TwitchInfo.ChannelName, $"Follow me on Instagram: {TwitchInfo.Instagram}");
             }
+            else if (e.ChatMessage.Message.StartsWith("!twitter", StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.SendMessage(TwitchInfo.ChannelName, $"Follow me on Twitter: {TwitchInfo.Twitter}");
+            }
+            else if (e.ChatMessage.Message.StartsWith("!blog", StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.SendMessage(TwitchInfo.ChannelName, $"My blog: {TwitchInfo.Blog}");
+            }
             else if (e.ChatMessage.Message.StartsWith("!playlist", StringComparison.InvariantCultureIgnoreCase))
             {
                 client.SendMessage(TwitchInfo.ChannelName, $"Playlist for my live on Twitch: {TwitchInfo.Playlist}");
