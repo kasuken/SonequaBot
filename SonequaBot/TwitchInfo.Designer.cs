@@ -106,6 +106,15 @@ namespace SonequaBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://discord.gg/8sNhKjY.
+        /// </summary>
+        internal static string Discord {
+            get {
+                return ResourceManager.GetString("Discord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://instagram.com/kasuken.
         /// </summary>
         internal static string Instagram {

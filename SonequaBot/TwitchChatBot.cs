@@ -102,6 +102,10 @@ namespace SonequaBot
             {
                 client.SendMessage(TwitchInfo.ChannelName, $"Playlist for my live on Twitch: {TwitchInfo.Playlist}");
             }
+            else if (e.ChatMessage.Message.StartsWith("!discord", StringComparison.InvariantCultureIgnoreCase))
+            {
+                client.SendMessage(TwitchInfo.ChannelName, $"Vieni sul mio canale Discord: {TwitchInfo.Discord}");
+            }
         }
 
         private async Task<TimeSpan?> GetUpTime()
