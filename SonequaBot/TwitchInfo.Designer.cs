@@ -61,15 +61,6 @@ namespace SonequaBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://dev.to/kasuken.
-        /// </summary>
-        internal static string Blog {
-            get {
-                return ResourceManager.GetString("Blog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to wyw6ncllftchpdqzta43khhp39c23t.
         /// </summary>
         internal static string BotToken {
@@ -102,51 +93,6 @@ namespace SonequaBot {
         internal static string ClientId {
             get {
                 return ResourceManager.GetString("ClientId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://discord.gg/8sNhKjY.
-        /// </summary>
-        internal static string Discord {
-            get {
-                return ResourceManager.GetString("Discord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://instagram.com/kasuken.
-        /// </summary>
-        internal static string Instagram {
-            get {
-                return ResourceManager.GetString("Instagram", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://open.spotify.com/user/uerwol/playlist/3u4OyWTr9fTnboGFAt38FU?si=WAxBiqR6RnWKtdpCouc9Cw.
-        /// </summary>
-        internal static string Playlist {
-            get {
-                return ResourceManager.GetString("Playlist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Blazor workshop (full day edition).
-        /// </summary>
-        internal static string ProjectDescription {
-            get {
-                return ResourceManager.GetString("ProjectDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://twitter.com/kasuken.
-        /// </summary>
-        internal static string Twitter {
-            get {
-                return ResourceManager.GetString("Twitter", resourceCulture);
             }
         }
     }

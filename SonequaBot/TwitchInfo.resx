@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Blog" xml:space="preserve">
-    <value>https://dev.to/kasuken</value>
-  </data>
   <data name="BotToken" xml:space="preserve">
     <value>wyw6ncllftchpdqzta43khhp39c23t</value>
   </data>
@@ -131,20 +128,5 @@
   </data>
   <data name="ClientId" xml:space="preserve">
     <value>i8rk9m4i976eiaqe6a6smyq0yg0g5l</value>
-  </data>
-  <data name="Discord" xml:space="preserve">
-    <value>https://discord.gg/8sNhKjY</value>
-  </data>
-  <data name="Instagram" xml:space="preserve">
-    <value>https://instagram.com/kasuken</value>
-  </data>
-  <data name="Playlist" xml:space="preserve">
-    <value>https://open.spotify.com/user/uerwol/playlist/3u4OyWTr9fTnboGFAt38FU?si=WAxBiqR6RnWKtdpCouc9Cw</value>
-  </data>
-  <data name="ProjectDescription" xml:space="preserve">
-    <value>Blazor workshop (full day edition)</value>
-  </data>
-  <data name="Twitter" xml:space="preserve">
-    <value>https://twitter.com/kasuken</value>
   </data>
 </root>
