@@ -72,10 +72,9 @@ body {
 }
 
 .alertgif {
-    height: 500px;
-    left: 50%;
-    position: absolute;
+    position: fixed;
     top: 50%;
-    width: 500px;
+    left: 50%;
     display: none;
+    transform: translate(-50%, -50%);
 }

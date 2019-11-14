@@ -73,14 +73,19 @@ namespace SonequaBot
 
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.StartsWith("hi", StringComparison.InvariantCultureIgnoreCase))
+            if (e.ChatMessage.Message.Contains(" java ", StringComparison.InvariantCultureIgnoreCase))
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Hey there { e.ChatMessage.DisplayName }.");
+                client.SendMessage(TwitchInfo.ChannelName, $"Hey { e.ChatMessage.DisplayName }! Dillo ancora se hai coraggio!!!");
             }
 
             if (e.ChatMessage.Message.StartsWith("!devastante",StringComparison.InvariantCultureIgnoreCase))
             {
                 await connection.SendAsync("SendDevastante");
+            }
+
+            if (e.ChatMessage.Message.StartsWith("!php", StringComparison.InvariantCultureIgnoreCase))
+            {
+                await connection.SendAsync("SendPhp");
             }
         }
 
