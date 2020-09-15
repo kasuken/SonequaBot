@@ -62,8 +62,15 @@ namespace SonequaBot
             client.Initialize(connectionCredentials, TwitchInfo.ChannelName);
             client.Connect();
 
+            client.OnUserJoined += Client_OnUserJoined;
+
             client.OnConnected += Client_OnConnected;
             client.OnMessageReceived += Client_OnMessageReceived;
+        }
+
+        private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        {
+            
         }
 
         private void Client_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
