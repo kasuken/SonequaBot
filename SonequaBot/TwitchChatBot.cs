@@ -31,7 +31,19 @@ namespace SonequaBot
             InizializeBot();
         }
 
-        private void InizializeBot()
+        private void InitializeCommands()
+        {
+            BotCommands.Add(new CommandHi());
+            BotCommands.Add(new CommandUptime());
+            BotCommands.Add(new CommandProject());
+            BotCommands.Add(new CommandPlaylist());
+            BotCommands.Add(new CommandDiscord());
+            BotCommands.Add(new CommandBlog());
+            BotCommands.Add(new CommandInstagram());
+            BotCommands.Add(new CommandTwitter());
+        }
+
+        private void InitializeBot()
         {
             client = new TwitchClient();
 
