@@ -23,9 +23,9 @@ namespace SonequaBot
 
         private TwitchClient client;
 
-        public TwitchChatBot()
-        {
-        }
+        private readonly List<string> UsersOnline = new List<string>();
+
+        private List<AbstractCommand> BotCommands = new List<AbstractCommand>();
 
         internal void Connect()
         {
@@ -33,7 +33,8 @@ namespace SonequaBot
 
             twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
 
-            InizializeBot();
+            InitializeCommands();
+            InitializeBot();
         }
 
         private void InitializeCommands()
@@ -90,40 +91,14 @@ namespace SonequaBot
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.StartsWith("hi", StringComparison.InvariantCultureIgnoreCase))
+            BotCommands.ForEach(delegate(AbstractCommand command)
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Hey there { e.ChatMessage.DisplayName }.");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!uptime", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var upTime = GetUpTime().Result;
-
-                client.SendMessage(TwitchInfo.ChannelName, upTime?.ToString() ?? "Offline");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!project", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"I'm working on {TwitchInfo.ProjectDescription}.");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!instagram", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"Follow me on Instagram: {TwitchInfo.Instagram}");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!twitter", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"Follow me on Twitter: {TwitchInfo.Twitter}");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!blog", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"My blog: {TwitchInfo.Blog}");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!playlist", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"Playlist for my live on Twitch: {TwitchInfo.Playlist}");
-            }
-            else if (e.ChatMessage.Message.StartsWith("!discord", StringComparison.InvariantCultureIgnoreCase))
-            {
-                client.SendMessage(TwitchInfo.ChannelName, $"Vieni sul mio canale Discord: {TwitchInfo.Discord}");
-            }
+                if (command.IsActivated(e.ChatMessage.Message))
+                {
+                    client.SendMessage(TwitchInfo.ChannelName,command.GetResponseMessage(twitchAPI, sender, e));
+                    return;
+                }
+            });
         }
 
         private void Client_OnConnectionError(object sender, OnConnectionErrorArgs e)
