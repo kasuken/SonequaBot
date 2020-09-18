@@ -1,22 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using SonequaBot.Commands;
 using TwitchLib.Api;
 using TwitchLib.Client;
+using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 
 namespace SonequaBot
 {
     internal class TwitchChatBot
     {
-        readonly ConnectionCredentials connectionCredentials = new ConnectionCredentials(TwitchInfo.BotUsername, TwitchInfo.BotToken);
-        TwitchClient client;
-        readonly TwitchAPI twitchAPI = new TwitchAPI();
+        private readonly ConnectionCredentials connectionCredentials =
+            new ConnectionCredentials(TwitchInfo.BotUsername, TwitchInfo.BotToken);
 
-        string[] BotUsers = new string[] { "sonequabot", "streamelements" };
+        private readonly TwitchAPI twitchAPI = new TwitchAPI();
 
-        List<string> UsersOnline = new List<string>();
+        private readonly string[] BotUsers = {"sonequabot", "streamelements"};
+
+        private TwitchClient client;
 
         public TwitchChatBot()
         {
@@ -62,27 +67,28 @@ namespace SonequaBot
             client.OnConnected += Client_OnConnected;
         }
 
-        private void Client_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
+        private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
-            client.SendMessage(TwitchInfo.ChannelName, $"Hi to everyone. I am Sonequabot and I am alive. Again.");
+            client.SendMessage(TwitchInfo.ChannelName, "Hi to everyone. I am Sonequabot and I am alive. Again.");
         }
 
-        private void Client_OnNewSubscriber(object sender, TwitchLib.Client.Events.OnNewSubscriberArgs e)
+        private void Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            client.SendMessage(TwitchInfo.ChannelName, $"Thank you for the subscription {e.Subscriber.DisplayName}!!! I really appreciate it!");
+            client.SendMessage(TwitchInfo.ChannelName,
+                $"Thank you for the subscription {e.Subscriber.DisplayName}!!! I really appreciate it!");
         }
 
-        private void Client_OnUserTimedout(object sender, TwitchLib.Client.Events.OnUserTimedoutArgs e)
+        private void Client_OnUserTimedout(object sender, OnUserTimedoutArgs e)
         {
             client.SendMessage(TwitchInfo.ChannelName, $"User {e.UserTimeout.Username} timed out.");
         }
 
-        private void Client_OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
+        private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
         {
             //client.SendWhisper(e.WhisperMessage.Username, $"your said: { e.WhisperMessage.Message}");
         }
 
-        private void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
+        private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
             if (e.ChatMessage.Message.StartsWith("hi", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -120,31 +126,17 @@ namespace SonequaBot
             }
         }
 
-        private async Task<TimeSpan?> GetUpTime()
-        {
-            var userId = await GetUserId(TwitchInfo.ChannelName);
-
-            return await twitchAPI.V5.Streams.GetUptimeAsync(userId);
-        }
-
-        async Task<string> GetUserId(string username)
-        {
-            var userList = await twitchAPI.V5.Users.GetUserByNameAsync(username);
-
-            return userList.Matches[0].Id;
-        }
-
-        private void Client_OnConnectionError(object sender, TwitchLib.Client.Events.OnConnectionErrorArgs e)
+        private void Client_OnConnectionError(object sender, OnConnectionErrorArgs e)
         {
             Console.WriteLine(e.Error.Message);
         }
 
-        private void Client_OnLog(object sender, TwitchLib.Client.Events.OnLogArgs e)
+        private void Client_OnLog(object sender, OnLogArgs e)
         {
             Console.WriteLine(e.Data);
         }
 
-        void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        private void Client_OnUserJoined(object sender, OnUserJoinedArgs e)
         {
             if (BotUsers.Contains(e.Username)) return;
 
@@ -160,7 +152,7 @@ namespace SonequaBot
             }
         }
 
-        void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
+        private void Client_OnUserLeft(object sender, OnUserLeftArgs e)
         {
             UsersOnline.Remove(e.Username);
         }
