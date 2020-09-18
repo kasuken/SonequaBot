@@ -7,12 +7,12 @@ namespace SonequaBot.Commands
 {
     public class CommandUptime : AbstractCommand
     {
-        protected new string Command = "!Hi";
+        protected new string Command = "!uptime";
         private TwitchAPI twitchAPI;
 
         public override string GetResponseMessage(TwitchAPI twitchApi, object sender, OnMessageReceivedArgs e)
         {
-            twitchAPI = twitchAPI;
+            twitchAPI = twitchApi;
 
             var upTime = GetUpTime().Result;
             return upTime?.ToString() ?? "Offline";

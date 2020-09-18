@@ -91,14 +91,26 @@ namespace SonequaBot
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            BotCommands.ForEach(delegate(AbstractCommand command)
+            if (!(e.ChatMessage.Message.StartsWith('!')))
             {
+                return;
+            }
+            
+            List<string> info = new List<string>();
+            info.Add("Unknown command.");
+            info.Add("List command :");
+            
+            foreach (var command in BotCommands)
+            {
+                info.Add(command.GetCommand());
                 if (command.IsActivated(e.ChatMessage.Message))
                 {
                     client.SendMessage(TwitchInfo.ChannelName,command.GetResponseMessage(twitchAPI, sender, e));
                     return;
                 }
-            });
+            }
+            
+            client.SendWhisper(e.ChatMessage.DisplayName, String.Join("\r\n", info.ToArray()));
         }
 
         private void Client_OnConnectionError(object sender, OnConnectionErrorArgs e)
