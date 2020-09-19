@@ -52,10 +52,10 @@ namespace SonequaBot
 
             twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
 
-            InizializeBot();
+            InitializeBot();
         }
 
-        private void InizializeBot()
+        private void InitializeBot()
         {
             client = new TwitchClient();
 
