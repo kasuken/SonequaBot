@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TwitchLib.Api;
 using TwitchLib.Client;
+using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 
 namespace SonequaBot
@@ -103,7 +104,5 @@ namespace SonequaBot
                 await connection.SendAsync("SendPhp");
             }
         }
-
-
     }
 }
