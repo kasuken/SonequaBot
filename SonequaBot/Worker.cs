@@ -21,6 +21,8 @@ namespace SonequaBot
         readonly TwitchAPI twitchAPI = new TwitchAPI();
 
         string[] BotUsers = new string[] { "sonequabot", "streamelements" };
+        
+        Dictionary<string,ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
 
         HubConnection connection;
 
@@ -63,14 +65,20 @@ namespace SonequaBot
             client.Connect();
 
             client.OnUserJoined += Client_OnUserJoined;
+            client.OnUserLeft += Client_OnUserLeft;
 
             client.OnConnected += Client_OnConnected;
             client.OnMessageReceived += Client_OnMessageReceived;
         }
 
+        private void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
+        {
+            ConnectedUsers.Remove(e.Username);
+        }
+
         private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
         {
-            
+            ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
         }
 
         private void Client_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
