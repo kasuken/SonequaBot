@@ -17,7 +17,7 @@ namespace SonequaBot.Commands
 
         public override bool IsActivated(string message)
         {
-            var activated = message.StartsWith(Command.Substring(0,5), StringComparison.InvariantCultureIgnoreCase);
+            var activated = message.StartsWith(Command.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
 
             var match = Regex.Match(message, @"^!slap\s*(\S+)");
