@@ -102,21 +102,28 @@ namespace SonequaBot
 
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            foreach (var command in BotCommands)
+            try
             {
-                if (command.IsActivated(e.ChatMessage.Message))
+                foreach (var command in BotCommands)
                 {
-                    switch (true)
+                    if (command.IsActivated(e.ChatMessage.Message))
                     {
-                        case true when command is IResponseMessage commandMessage:
-                            client.SendMessage(TwitchInfo.ChannelName, commandMessage.GetMessage(e));
-                            break;
-                        
-                        case true when command is IResponseVisual commandVisual:
-                            await connection.SendAsync( commandVisual.GetVisualEvent(e));
-                            break;
+                        switch (true)
+                        {
+                            case true when command is IResponseMessage commandMessage:
+                                client.SendMessage(TwitchInfo.ChannelName, commandMessage.GetMessage(e));
+                                break;
+
+                            case true when command is IResponseVisual commandVisual:
+                                await connection.SendAsync(commandVisual.GetVisualEvent(e));
+                                break;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                client.SendWhisper(e.ChatMessage.Username, ex.Message);
             }
         }
     }
