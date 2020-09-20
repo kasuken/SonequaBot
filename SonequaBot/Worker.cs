@@ -102,7 +102,7 @@ namespace SonequaBot
 
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            foreach (ICommand command in BotCommands)
+            foreach (var command in BotCommands)
             {
                 if (command.IsActivated(e.ChatMessage.Message))
                 {
