@@ -7,7 +7,7 @@ namespace SonequaBot.Commands
 {
     public class CommandHi : CommandBase, IResponseMessage
     {
-        protected new string Command = "hi";
+        protected string Command = "hi";
         
         public string GetMessage(OnMessageReceivedArgs e)
         {

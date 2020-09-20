@@ -5,7 +5,7 @@ namespace SonequaBot.Commands
 {
     public class CommandDevastante : CommandBase, IResponseVisual
     {
-        protected new string Command = "!devastante";
+        protected string Command = "!devastante";
         
         public string GetVisualEvent(OnMessageReceivedArgs e)
         {

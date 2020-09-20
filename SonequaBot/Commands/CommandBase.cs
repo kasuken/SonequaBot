@@ -22,11 +22,9 @@ namespace SonequaBot.Commands
             {
                 case CommandActivationComparison.StartsWith:
                     return message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase);
-                    break;
                 
                 case CommandActivationComparison.Contains:
                     return message.Contains(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase);
-                    break;
             }
 
             return false;

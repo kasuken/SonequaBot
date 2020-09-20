@@ -5,7 +5,7 @@ namespace SonequaBot.Commands
 {
     public class CommandPhp : CommandBase, IResponseVisual
     {
-        protected new string Command = "!php";
+        protected string Command = "!php";
         
         public string GetVisualEvent(OnMessageReceivedArgs e)
         {
