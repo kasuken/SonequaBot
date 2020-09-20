@@ -16,7 +16,7 @@ namespace SonequaBot.Commands
          */
         protected CommandActivationComparison ActivationComparison = CommandActivationComparison.StartsWith;
 
-        public bool IsActivated(string message)
+        public virtual bool IsActivated(string message)
         {
             switch (GetComparisonMethod())
             {
