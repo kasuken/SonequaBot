@@ -8,7 +8,7 @@ namespace SonequaBot.Commands
     public class CommandSlap : CommandBase, IResponseMessage
     {
         private string _target;
-        protected string Command = "!slap {target}";
+        protected string Command = "!slap {@string target}";
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
@@ -17,7 +17,7 @@ namespace SonequaBot.Commands
 
         public override bool IsActivated(string message)
         {
-            var activated = message.StartsWith("!slap", StringComparison.InvariantCultureIgnoreCase);
+            var activated = message.StartsWith(Command.Substring(0,5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
 
             var match = Regex.Match(message, @"^!slap\s*(\S+)");
