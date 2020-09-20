@@ -6,12 +6,12 @@ namespace SonequaBot.Commands
 {
     public class CommandJava : CommandBase, IResponseMessage
     {
-        protected string Command = " java ";
         protected new CommandActivationComparison ActivationComparison = CommandActivationComparison.Contains;
-        
+        protected string Command = " java ";
+
         public string GetMessage(OnMessageReceivedArgs e)
         {
-            return $"Hey { e.ChatMessage.DisplayName }! Dillo ancora se hai coraggio!!!";
+            return $"Hey {e.ChatMessage.DisplayName}! Dillo ancora se hai coraggio!!!";
         }
     }
 }
