@@ -9,8 +9,6 @@ namespace SonequaBot.Commands
     {
         protected new string Command = "hi";
         
-        protected new CommandActivationComparison ActivationComparison = CommandActivationComparison.StartsWith;
-
         public string GetMessage(OnMessageReceivedArgs e)
         {
             return $"Hey there {e.ChatMessage.DisplayName}.";
