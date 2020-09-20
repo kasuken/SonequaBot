@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SonequaBot.Commands;
+using SonequaBot.Commands.Interfaces;
+using SonequaBot.Commands.Interfaces.Responses;
 using TwitchLib.Api;
 using TwitchLib.Client;
 using TwitchLib.Client.Events;
@@ -24,6 +27,8 @@ namespace SonequaBot
         string[] BotUsers = new string[] { "sonequabot", "streamelements" };
         
         Dictionary<string,ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
+        
+        List<ICommand> BotCommands = new List<ICommand>();
 
         HubConnection connection;
 
@@ -72,6 +77,14 @@ namespace SonequaBot
             client.OnMessageReceived += Client_OnMessageReceived;
         }
 
+        private void InitializeBotCommands()
+        {
+            //BotCommands.Add(new CommandHi()); Not needed in twitch
+            BotCommands.Add(new CommandJava());;
+            BotCommands.Add(new CommandPhp());
+            BotCommands.Add(new CommandDevastante());
+        }
+
         private void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
         {
             ConnectedUsers.Remove(e.Username);
@@ -89,19 +102,21 @@ namespace SonequaBot
 
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.Contains(" java ", StringComparison.InvariantCultureIgnoreCase))
+            foreach (ICommand command in BotCommands)
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Hey { e.ChatMessage.DisplayName }! Dillo ancora se hai coraggio!!!");
-            }
-
-            if (e.ChatMessage.Message.StartsWith("!devastante",StringComparison.InvariantCultureIgnoreCase))
-            {
-                await connection.SendAsync("SendDevastante");
-            }
-
-            if (e.ChatMessage.Message.StartsWith("!php", StringComparison.InvariantCultureIgnoreCase))
-            {
-                await connection.SendAsync("SendPhp");
+                if (command.IsActivated(e.ChatMessage.Message))
+                {
+                    switch (true)
+                    {
+                        case true when command is IResponseMessage commandMessage:
+                            client.SendMessage(TwitchInfo.ChannelName, commandMessage.GetMessage(e));
+                            break;
+                        
+                        case true when command is IResponseVisual commandVisual:
+                            await connection.SendAsync( commandVisual.GetVisualEvent(e));
+                            break;
+                    }
+                }
             }
         }
     }
