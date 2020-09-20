@@ -59,7 +59,8 @@ namespace SonequaBot
             Console.WriteLine("Connecting...");
 
             twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
-
+            
+            InitializeBotCommands();
             InitializeBot();
         }
 
@@ -83,6 +84,8 @@ namespace SonequaBot
             BotCommands.Add(new CommandJava());;
             BotCommands.Add(new CommandPhp());
             BotCommands.Add(new CommandDevastante());
+            BotCommands.Add(new CommandSlap());
+            BotCommands.Add(new CommandDiceRoll());
         }
 
         private void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
