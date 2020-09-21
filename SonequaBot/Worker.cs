@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SonequaBot.Commands;
+using SonequaBot.Commands.Interfaces;
+using SonequaBot.Commands.Interfaces.Responses;
 using TwitchLib.Api;
 using TwitchLib.Client;
+using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 
 namespace SonequaBot
@@ -21,6 +25,10 @@ namespace SonequaBot
         readonly TwitchAPI twitchAPI = new TwitchAPI();
 
         string[] BotUsers = new string[] { "sonequabot", "streamelements" };
+        
+        Dictionary<string,ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
+        
+        List<ICommand> BotCommands = new List<ICommand>();
 
         HubConnection connection;
 
@@ -51,11 +59,12 @@ namespace SonequaBot
             Console.WriteLine("Connecting...");
 
             twitchAPI.Settings.ClientId = TwitchInfo.ClientId;
-
-            InizializeBot();
+            
+            InitializeBotCommands();
+            InitializeBot();
         }
 
-        private void InizializeBot()
+        private void InitializeBot()
         {
             client = new TwitchClient();
 
@@ -63,14 +72,30 @@ namespace SonequaBot
             client.Connect();
 
             client.OnUserJoined += Client_OnUserJoined;
+            client.OnUserLeft += Client_OnUserLeft;
 
             client.OnConnected += Client_OnConnected;
             client.OnMessageReceived += Client_OnMessageReceived;
         }
 
+        private void InitializeBotCommands()
+        {
+            //BotCommands.Add(new CommandHi()); Not needed in twitch
+            BotCommands.Add(new CommandJava());;
+            BotCommands.Add(new CommandPhp());
+            BotCommands.Add(new CommandDevastante());
+            BotCommands.Add(new CommandSlap());
+            BotCommands.Add(new CommandDiceRoll());
+        }
+
+        private void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
+        {
+            ConnectedUsers.Remove(e.Username);
+        }
+
         private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
         {
-            
+            ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
         }
 
         private void Client_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
@@ -80,22 +105,29 @@ namespace SonequaBot
 
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.Contains(" java ", StringComparison.InvariantCultureIgnoreCase))
+            try
             {
-                client.SendMessage(TwitchInfo.ChannelName, $"Hey { e.ChatMessage.DisplayName }! Dillo ancora se hai coraggio!!!");
-            }
+                foreach (var command in BotCommands)
+                {
+                    if (command.IsActivated(e.ChatMessage.Message))
+                    {
+                        switch (true)
+                        {
+                            case true when command is IResponseMessage commandMessage:
+                                client.SendMessage(TwitchInfo.ChannelName, commandMessage.GetMessage(e));
+                                break;
 
-            if (e.ChatMessage.Message.StartsWith("!devastante",StringComparison.InvariantCultureIgnoreCase))
-            {
-                await connection.SendAsync("SendDevastante");
+                            case true when command is IResponseVisual commandVisual:
+                                await connection.SendAsync(commandVisual.GetVisualEvent(e));
+                                break;
+                        }
+                    }
+                }
             }
-
-            if (e.ChatMessage.Message.StartsWith("!php", StringComparison.InvariantCultureIgnoreCase))
+            catch (Exception ex)
             {
-                await connection.SendAsync("SendPhp");
+                client.SendWhisper(e.ChatMessage.Username, ex.Message);
             }
         }
-
-
     }
 }
