@@ -16,9 +16,9 @@ using TwitchLib.Client.Models;
 
 namespace SonequaBot
 {
-    public class Worker : BackgroundService
+    public class Sonequa : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<Sonequa> _logger;
 
         readonly ConnectionCredentials connectionCredentials = new ConnectionCredentials(TwitchInfo.BotUsername, TwitchInfo.BotToken);
         TwitchClient client;
@@ -32,7 +32,7 @@ namespace SonequaBot
 
         HubConnection connection;
 
-        public Worker(ILogger<Worker> logger)
+        public Sonequa(ILogger<Sonequa> logger)
         {
             _logger = logger;
 
