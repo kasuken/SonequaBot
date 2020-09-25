@@ -126,7 +126,7 @@ namespace SonequaBot
             }
             catch (Exception ex)
             {
-                client.SendWhisper(e.ChatMessage.Username, ex.Message);
+                //client.SendWhisper(e.ChatMessage.Username, ex.Message);
             }
         }
     }
