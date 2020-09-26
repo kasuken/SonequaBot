@@ -12,19 +12,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="TwitchLib" Version="3.0.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="TwitchInfo.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TwitchInfo.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="TwitchInfo.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TwitchInfo.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>
