@@ -8,12 +8,15 @@ namespace SonequaBot.Commands
         /**
          * The Command string for activation.
          */
-        protected string ActivationCommand;
+        protected abstract string ActivationCommand
+        {
+            get;
+        }
 
         /**
          * The Comparison type for activation.
          */
-        protected CommandActivationComparison ActivationComparison = CommandActivationComparison.StartsWith;
+        protected virtual CommandActivationComparison ActivationComparison => CommandActivationComparison.StartsWith;
 
         public virtual bool IsActivated(string message)
         {
@@ -29,12 +32,12 @@ namespace SonequaBot.Commands
             return false;
         }
 
-        public CommandActivationComparison GetComparisonMethod()
+        public virtual CommandActivationComparison GetComparisonMethod()
         {
             return ActivationComparison;
         }
 
-        public string GetActivationCommand()
+        public virtual string GetActivationCommand()
         {
             return ActivationCommand;
         }

@@ -8,16 +8,32 @@ namespace SonequaBot.Commands
     public class CommandSlap : CommandBase, IResponseMessage
     {
         private string _target;
-        protected string Command = "!slap {@string target}";
+        protected override string ActivationCommand => "!slap {@string target}";
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
-            return $"{e.ChatMessage.DisplayName} slap {_target}.";
+            switch (_target)
+            {
+                case "SonequaBot":
+                    return $"{e.ChatMessage.DisplayName} hey dude, did you think i slap myself? FY! I slap YOU MF!.";
+            }
+
+            string enrich = "";
+            switch (new Random().Next(0, 5))
+            {
+                case 0: enrich = " with violence"; break;
+                case 1: enrich = " with a beautiful Microsoft whip"; break;
+                case 2: enrich = " with a mouse"; break;
+                case 3: enrich = " with a keyboard"; break;
+                case 4: enrich = " yelling : be my MSDOS!!!! and bless Bill Gates! Amen."; break;
+            }
+            
+            return $"{e.ChatMessage.DisplayName} at your service! I slap {_target}{enrich}.";
         }
 
         public override bool IsActivated(string message)
         {
-            var activated = message.StartsWith(Command.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
+            var activated = message.StartsWith(ActivationCommand.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
 
             var match = Regex.Match(message, @"^!slap\s*(\S+)");

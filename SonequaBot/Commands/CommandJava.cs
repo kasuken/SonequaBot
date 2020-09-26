@@ -6,8 +6,8 @@ namespace SonequaBot.Commands
 {
     public class CommandJava : CommandBase, IResponseMessage
     {
-        protected new CommandActivationComparison ActivationComparison = CommandActivationComparison.Contains;
-        protected string Command = " java ";
+        protected override CommandActivationComparison ActivationComparison => CommandActivationComparison.Contains;
+        protected override string ActivationCommand => " java ";
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
