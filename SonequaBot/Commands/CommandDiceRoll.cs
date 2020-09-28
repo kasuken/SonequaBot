@@ -10,7 +10,8 @@ namespace SonequaBot.Commands
         private readonly Random _rnd = new Random();
 
         private const int DefaultDiceFaces = 6;
-        protected string Command = "!roll{@int dice faces}";
+        
+        protected override string ActivationCommand => "!roll{@int dice faces}";
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
@@ -22,7 +23,7 @@ namespace SonequaBot.Commands
 
         public override bool IsActivated(string message)
         {
-            return base.IsActivated(message.Substring(0, 5));
+            return message.Substring(0, 5) == "!roll";
         }
     }
 }
