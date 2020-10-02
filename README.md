@@ -1,2 +1,2 @@
 # SonequaBot
-A Twitch bot written in .NET Core
+A Twitch and Discord bot written in .NET Core
