@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SonequaBot.Services;
 
 namespace SonequaBot
 {
@@ -23,6 +24,8 @@ namespace SonequaBot
                     var configuration = hostContext.Configuration;
                     var options = configuration.GetSection("SonequaSettings").Get<SonequaSettings>();
                     services.AddSingleton(options);
+
+                    services.AddSingleton<SentimentAnalysisService>();
 
                     services.AddHostedService<Sonequa>();
                 });

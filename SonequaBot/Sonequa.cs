@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 using SonequaBot.Commands;
 using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Interfaces.Responses;
+using SonequaBot.Models;
+using SonequaBot.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TwitchLib.Api;
@@ -31,10 +34,15 @@ namespace SonequaBot
 
         private readonly SonequaSettings _options;
 
-        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options)
+        private readonly SentimentAnalysisService _sentimentAnalysisService;
+        private List<SentimentScores> sentimentScores = new List<SentimentScores>();
+        private SentimentScores currentChatSentiment = new SentimentScores();
+
+        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options, SentimentAnalysisService sentimentAnalysisService)
         {
             _logger = logger;
             _options = options;
+            _sentimentAnalysisService = sentimentAnalysisService;
 
             connectionCredentials = new ConnectionCredentials(_options.BotUsername, _options.BotToken);
 
@@ -134,6 +142,32 @@ namespace SonequaBot
             {
                 _logger.LogError(ex.Message);
                 //client.SendWhisper(e.ChatMessage.Username, ex.Message);
+            }
+
+            if (e.ChatMessage.Message.Length > 10)
+            {
+                var currentScore = _sentimentAnalysisService.ElaborateSentence(e.ChatMessage.Message);
+
+                sentimentScores.Add(currentScore);
+
+                //TODO - improve this section
+                var positiveAverage = sentimentScores.Average(c => c.Positive);
+                var negativeAverage = sentimentScores.Average(c => c.Negative);
+                var neutralAverage = sentimentScores.Average(c => c.Neutral);
+
+                currentChatSentiment.Positive = positiveAverage;
+                currentChatSentiment.Negative = negativeAverage;
+                currentChatSentiment.Neutral = neutralAverage;
+
+                currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Neutral);
+
+                if (currentChatSentiment.Positive > currentChatSentiment.Negative && currentChatSentiment.Positive > currentChatSentiment.Neutral)
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Positive);
+
+                if (currentChatSentiment.Negative > currentChatSentiment.Positive && currentChatSentiment.Negative > currentChatSentiment.Neutral)
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Negative);
+
+                await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
             }
         }
     }
