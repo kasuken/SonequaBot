@@ -38,6 +38,10 @@ namespace SonequaBot
         private List<SentimentScores> sentimentScores = new List<SentimentScores>();
         private SentimentScores currentChatSentiment = new SentimentScores();
 
+        private double positiveAverage = 0.0;
+        private double neutralAverage = 0.0;
+        private double negativeAverage = 0.0;
+
         public Sonequa(ILogger<Sonequa> logger, SonequaSettings options, SentimentAnalysisService sentimentAnalysisService)
         {
             _logger = logger;
@@ -150,22 +154,49 @@ namespace SonequaBot
 
                 sentimentScores.Add(currentScore);
 
-                //TODO - improve this section
-                var positiveAverage = sentimentScores.Average(c => c.Positive);
-                var negativeAverage = sentimentScores.Average(c => c.Negative);
-                var neutralAverage = sentimentScores.Average(c => c.Neutral);
+                await connection.SendAsync("SentimentRealTime", currentScore.GetSentiment().ToString().ToLower());
 
-                currentChatSentiment.Positive = positiveAverage;
-                currentChatSentiment.Negative = negativeAverage;
-                currentChatSentiment.Neutral = neutralAverage;
+                if (currentScore.Neutral > currentScore.Negative && currentScore.Neutral > currentScore.Negative)
+                {
+                    neutralAverage = sentimentScores.Average(c => c.Neutral);
+                    currentChatSentiment.Neutral = neutralAverage;
 
-                currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Neutral);
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Neutral);
+                }
 
-                if (currentChatSentiment.Positive > currentChatSentiment.Negative && currentChatSentiment.Positive > currentChatSentiment.Neutral)
+                if (currentScore.Positive > currentScore.Negative && currentScore.Positive > currentScore.Neutral)
+                {
+                    positiveAverage = sentimentScores.Average(c => c.Positive);
+                    currentChatSentiment.Positive = positiveAverage;
+
                     currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Positive);
+                }
 
-                if (currentChatSentiment.Negative > currentChatSentiment.Positive && currentChatSentiment.Negative > currentChatSentiment.Neutral)
+                if (currentScore.Negative > currentScore.Positive && currentScore.Negative > currentScore.Neutral)
+                {
+                    negativeAverage = sentimentScores.Average(c => c.Negative);
+                    currentChatSentiment.Negative = negativeAverage;
+
                     currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Negative);
+                }
+
+                if (neutralAverage > positiveAverage && neutralAverage > negativeAverage)
+                {
+                    currentChatSentiment.Neutral = neutralAverage;
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Neutral);
+                }
+
+                if (positiveAverage > negativeAverage && positiveAverage > neutralAverage)
+                {
+                    currentChatSentiment.Positive = positiveAverage;
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Positive);
+                }
+
+                if (negativeAverage > positiveAverage && negativeAverage > neutralAverage)
+                {
+                    currentChatSentiment.Negative = negativeAverage;
+                    currentChatSentiment.SetSentiment(SentimentScores.TextSentiment.Negative);
+                }
 
                 await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
             }
