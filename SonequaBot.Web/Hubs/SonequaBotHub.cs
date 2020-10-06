@@ -27,5 +27,10 @@ namespace SonequaBot.Web.Hubs
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
         }
+
+        public async Task Sentiment (string sentiment)
+        {
+            await Clients.All.SendAsync("ReceiveSentiment", sentiment);
+        }
     }
 }

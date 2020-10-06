@@ -24,6 +24,10 @@ connection.on("ReceivePhp", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveSentiment", function (sentiment) {
+    document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {
