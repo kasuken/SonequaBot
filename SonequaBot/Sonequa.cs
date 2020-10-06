@@ -139,6 +139,8 @@ namespace SonequaBot
                                 await connection.SendAsync(commandVisual.GetVisualEvent(e));
                                 break;
                         }
+                        
+                        return; // if activated exit, if not multiple sentiment of !devastante will be UBER negative 
                     }
                 }
             }
