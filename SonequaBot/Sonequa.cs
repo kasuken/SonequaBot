@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TwitchLib.Api;
 using TwitchLib.Client;
+using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 
 namespace SonequaBot
@@ -37,10 +38,6 @@ namespace SonequaBot
         private readonly SentimentAnalysisService _sentimentAnalysisService;
         private List<SentimentScores> sentimentScores = new List<SentimentScores>();
         private SentimentScores currentChatSentiment = new SentimentScores();
-
-        private double positiveAverage = 0.0;
-        private double neutralAverage = 0.0;
-        private double negativeAverage = 0.0;
 
         public Sonequa(ILogger<Sonequa> logger, SonequaSettings options, SentimentAnalysisService sentimentAnalysisService)
         {
@@ -166,30 +163,30 @@ namespace SonequaBot
             {
                 sentimentScores.RemoveAt(0);
             }
-            
+
             var currentScore = _sentimentAnalysisService.ElaborateSentence(e.ChatMessage.Message);
-            
+
             await connection.SendAsync("SentimentRealTime", currentScore.GetSentiment().ToString().ToLower());
-            
+
             var currentUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
             {
-                { SentimentScores.TextSentiment.Positive, currentScore.Positive },
-                { SentimentScores.TextSentiment.Neutral, currentScore.Neutral },
-                { SentimentScores.TextSentiment.Negative, currentScore.Negative },
+                {SentimentScores.TextSentiment.Positive, currentScore.Positive},
+                {SentimentScores.TextSentiment.Neutral, currentScore.Neutral},
+                {SentimentScores.TextSentiment.Negative, currentScore.Negative},
             };
 
             var currentRankedSentiment = currentUnrankedSentiment.OrderBy(item => item.Value);
-            
+
             _logger.LogInformation(string.Concat(
-                "currentScore:",
-                Environment.NewLine, 
-                string.Join(
-                        Environment.NewLine, 
+                    "currentScore:",
+                    Environment.NewLine,
+                    string.Join(
+                        Environment.NewLine,
                         currentRankedSentiment.Select(a => $"{a.Key}: {a.Value}")
                     )
                 )
             );
-            
+
             var processedSentiment = new SentimentScores();
             switch (currentRankedSentiment.Last().Key)
             {
@@ -203,29 +200,29 @@ namespace SonequaBot
                     processedSentiment.Negative = currentRankedSentiment.Last().Value;
                     break;
             }
-            
+
             sentimentScores.Add(processedSentiment);
-            
+
             var chatUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
             {
-                { SentimentScores.TextSentiment.Positive, sentimentScores.Average(c => c.Positive) },
-                { SentimentScores.TextSentiment.Neutral, sentimentScores.Average(c => c.Neutral) },
-                { SentimentScores.TextSentiment.Negative, sentimentScores.Average(c => c.Negative)},
+                {SentimentScores.TextSentiment.Positive, sentimentScores.Average(c => c.Positive)},
+                {SentimentScores.TextSentiment.Neutral, sentimentScores.Average(c => c.Neutral)},
+                {SentimentScores.TextSentiment.Negative, sentimentScores.Average(c => c.Negative)},
             };
 
             var chatRankedSentiment = chatUnrankedSentiment.OrderBy(item => item.Value);
-            
+
             // set current chat sentiment with values
             currentChatSentiment.SetSentiment(chatRankedSentiment.Last().Key);
             currentChatSentiment.Positive = chatUnrankedSentiment[SentimentScores.TextSentiment.Positive];
             currentChatSentiment.Neutral = chatUnrankedSentiment[SentimentScores.TextSentiment.Neutral];
             currentChatSentiment.Negative = chatUnrankedSentiment[SentimentScores.TextSentiment.Negative];
-            
+
             _logger.LogInformation(string.Concat(
-                "Chat sentiment:",
-                Environment.NewLine, 
-                string.Join(
-                        Environment.NewLine, 
+                    "Chat sentiment:",
+                    Environment.NewLine,
+                    string.Join(
+                        Environment.NewLine,
                         chatRankedSentiment.Select(a => $"{a.Key}: {a.Value}")
                     )
                 )
