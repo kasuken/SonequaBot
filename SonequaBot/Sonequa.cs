@@ -166,7 +166,7 @@ namespace SonequaBot
 
             var currentScore = _sentimentAnalysisService.ElaborateSentence(e.ChatMessage.Message);
 
-            await connection.SendAsync("SentimentRealTime", currentScore.GetSentiment().ToString().ToLower());
+            await connection.SendAsync("Sentiment", currentScore.GetSentiment().ToString().ToLower());
 
             var currentUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
             {
@@ -233,7 +233,9 @@ namespace SonequaBot
                                        (currentChatSentiment.Negative - currentChatSentiment.Neutral);
             _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
 
-            await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
+            //await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
+
+            await connection.SendAsync("GaugeSentiment", absoluteSentiment);
         }
     }
 }

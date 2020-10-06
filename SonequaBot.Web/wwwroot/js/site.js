@@ -2,14 +2,6 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/sonequaBotHub").build();
 
-//connection.on("ReceiveMessage", function (message) {
-//    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-//    var encodedMsg = " says " + msg;
-//    var li = document.createElement("li");
-//    li.textContent = encodedMsg;
-//    document.getElementById("messagesList").appendChild(li);
-//});
-
 connection.on("ReceiveDevastante", function() {
     document.getElementById("alertdevastante").style.display = "block";
     
@@ -25,6 +17,10 @@ connection.on("ReceivePhp", function () {
 });
 
 connection.on("ReceiveSentiment", function (sentiment) {
+    document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
+});
+
+connection.on("ReceiveSentimentRealtime", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
 
