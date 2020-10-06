@@ -233,8 +233,6 @@ namespace SonequaBot
                                        (currentChatSentiment.Negative - currentChatSentiment.Neutral);
             _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
 
-            //await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
-
             await connection.SendAsync("GaugeSentiment", absoluteSentiment);
         }
     }

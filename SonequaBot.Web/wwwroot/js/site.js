@@ -20,10 +20,6 @@ connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
 
-connection.on("ReceiveSentimentRealtime", function (sentiment) {
-    document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
-});
-
 connection.start().then(function () {
     
 }).catch(function (err) {
