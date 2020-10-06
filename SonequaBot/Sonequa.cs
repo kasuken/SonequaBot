@@ -227,7 +227,12 @@ namespace SonequaBot
                     )
                 )
             );
-            
+
+            // interesting can be used with a gauge or a vertical meter that can go from -1 to 1
+            double absoluteSentiment = (currentChatSentiment.Positive - currentChatSentiment.Neutral) -
+                                       (currentChatSentiment.Negative - currentChatSentiment.Neutral);
+            _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
+
             await connection.SendAsync("Sentiment", currentChatSentiment.GetSentiment().ToString().ToLower());
         }
     }
