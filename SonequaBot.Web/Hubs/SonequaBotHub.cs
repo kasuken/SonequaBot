@@ -23,6 +23,11 @@ namespace SonequaBot.Web.Hubs
             await Clients.All.SendAsync("ReceivePhp");
         }
 
+        public async Task SendFriday()
+        {
+            await Clients.All.SendAsync("ReceiveFriday");
+        }
+
         public async Task SendMessage(string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", message);

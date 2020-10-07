@@ -16,6 +16,12 @@ connection.on("ReceivePhp", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveFriday", function () {
+    document.getElementById("alertfriday").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
