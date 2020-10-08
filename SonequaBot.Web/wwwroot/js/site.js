@@ -22,6 +22,12 @@ connection.on("ReceiveFriday", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveExcel", function () {
+    document.getElementById("alertexcel").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
