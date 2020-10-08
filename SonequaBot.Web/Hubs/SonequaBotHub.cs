@@ -28,6 +28,11 @@ namespace SonequaBot.Web.Hubs
             await Clients.All.SendAsync("ReceiveFriday");
         }
 
+        public async Task SendDisagio()
+        {
+            await Clients.All.SendAsync("ReceiveDisagio");
+        }
+
         public async Task SendExcel()
         {
             await Clients.All.SendAsync("ReceiveExcel");
