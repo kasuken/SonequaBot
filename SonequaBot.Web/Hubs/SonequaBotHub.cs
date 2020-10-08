@@ -37,6 +37,11 @@ namespace SonequaBot.Web.Hubs
         {
             await Clients.All.SendAsync("ReceiveExcel");
         }
+        
+        public async Task SendGren()
+        {
+            await Clients.All.SendAsync("ReceiveGren");
+        }
 
         public async Task SendMessage(string message)
         {
