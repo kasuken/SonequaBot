@@ -45,6 +45,7 @@ connection.start().then(function () {
 });
 
 function removeAlert() {
-    document.getElementById("alertphp").style.display = "none";
-    document.getElementById("alertdevastante").style.display = "none";
+    document.querySelectorAll(".alertgif").forEach(function(item) {
+        item.style.display = "none";
+    });
 }
