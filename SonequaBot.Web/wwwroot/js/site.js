@@ -38,6 +38,12 @@ connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
 
+connection.on("ReceiveGren", function (sentiment) {
+    document.getElementById("alertgren").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {
@@ -45,6 +51,7 @@ connection.start().then(function () {
 });
 
 function removeAlert() {
-    document.getElementById("alertphp").style.display = "none";
-    document.getElementById("alertdevastante").style.display = "none";
+    document.querySelectorAll(".alertgif").forEach(function(item) {
+        item.style.display = "none";
+    });
 }
