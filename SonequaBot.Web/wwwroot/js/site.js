@@ -38,6 +38,12 @@ connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
 
+connection.on("ReceiveGren", function (sentiment) {
+    document.getElementById("alertgren").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {

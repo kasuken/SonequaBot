@@ -12,10 +12,13 @@ namespace SonequaBot.Commands
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
-            switch (_target)
+            switch (_target.ToLower())
             {
-                case "SonequaBot":
-                    return $"{e.ChatMessage.DisplayName} hey dude, did you think i slap myself? FY! I slap YOU MF!.";
+                case "kasuken":
+                    return $"{e.ChatMessage.DisplayName} sorry, i can't is my creator!";
+                
+                case "sonequabot":
+                    return $"{e.ChatMessage.DisplayName} hey dude, did you think i slap myself? FY! I slap YOU MF!";
             }
 
             string enrich = "";
