@@ -44,6 +44,12 @@ connection.on("ReceiveGren", function (sentiment) {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveDebug", function () {
+    document.getElementById("alertdebug").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {
