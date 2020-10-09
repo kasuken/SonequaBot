@@ -12,10 +12,15 @@ namespace SonequaBot.Web.Hubs
         {
             return base.OnConnectedAsync();
         }
-
+        
         public async Task SendDevastante()
         {
             await Clients.All.SendAsync("ReceiveDevastante");
+        }
+
+        public async Task SendDio()
+        {
+            await Clients.All.SendAsync("ReceiveDio");
         }
 
         public async Task SendPhp()
