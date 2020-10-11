@@ -23,7 +23,7 @@ namespace SonequaBot.Commands
 
         public override bool IsActivated(string message)
         {
-            return message.Substring(0, 5) == "!roll";
+            return (message.Length >= 5) && message.Substring(0, 5) == "!roll";
         }
     }
 }
