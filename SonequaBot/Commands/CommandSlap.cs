@@ -12,6 +12,11 @@ namespace SonequaBot.Commands
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
+            if (message.Length < 5)
+            {
+                return false;
+            }
+            
             switch (_target.ToLower())
             {
                 case "kasuken":
