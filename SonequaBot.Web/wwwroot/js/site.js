@@ -61,6 +61,15 @@ connection.on("ReceiveGren", function (sentiment) {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceivePaura", function() {
+    document.getElementById("alertpaura").style.display = "block";
+
+    document.getElementById("soundpaura").play();
+
+    setTimeout(removeAlert, 5000);
+});
+
+
 connection.start().then(function () {
     
 }).catch(function (err) {
