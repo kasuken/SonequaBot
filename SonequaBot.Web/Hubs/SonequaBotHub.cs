@@ -12,10 +12,15 @@ namespace SonequaBot.Web.Hubs
         {
             return base.OnConnectedAsync();
         }
-
+        
         public async Task SendDevastante()
         {
             await Clients.All.SendAsync("ReceiveDevastante");
+        }
+
+        public async Task SendDio()
+        {
+            await Clients.All.SendAsync("ReceiveDio");
         }
 
         public async Task SendPhp()
@@ -41,6 +46,16 @@ namespace SonequaBot.Web.Hubs
         public async Task SendGren()
         {
             await Clients.All.SendAsync("ReceiveGren");
+        }
+        
+        public async Task SendPaura()
+        {
+            await Clients.All.SendAsync("ReceivePaura");
+        }
+
+        public async Task SendDebug()
+        {
+            await Clients.All.SendAsync("ReceiveDebug");
         }
 
         public async Task SendMessage(string message)
