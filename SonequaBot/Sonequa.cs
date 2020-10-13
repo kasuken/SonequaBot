@@ -85,6 +85,7 @@ namespace SonequaBot
             BotCommands.Add(new CommandDiceRoll());
             BotCommands.Add(new CommandFriday());
             BotCommands.Add(new CommandDisagio());
+            BotCommands.Add(new CommandDebug());
         }
 
         private void InitializeBot()
