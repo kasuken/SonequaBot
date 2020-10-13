@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/sonequaBotHub").build();
 
@@ -63,12 +63,10 @@ connection.on("ReceiveGren", function (sentiment) {
 
 connection.on("ReceivePaura", function() {
     document.getElementById("alertpaura").style.display = "block";
-
     document.getElementById("soundpaura").play();
-
+  
     setTimeout(removeAlert, 5000);
 });
-
 
 connection.start().then(function () {
     

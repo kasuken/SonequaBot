@@ -53,6 +53,11 @@ namespace SonequaBot.Web.Hubs
             await Clients.All.SendAsync("ReceivePaura");
         }
 
+        public async Task SendDebug()
+        {
+            await Clients.All.SendAsync("ReceiveDebug");
+        }
+
         public async Task SendMessage(string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
