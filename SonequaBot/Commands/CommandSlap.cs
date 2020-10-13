@@ -12,11 +12,6 @@ namespace SonequaBot.Commands
 
         public string GetMessage(OnMessageReceivedArgs e)
         {
-            if (message.Length < 5)
-            {
-                return false;
-            }
-            
             switch (_target.ToLower())
             {
                 case "kasuken":
@@ -41,6 +36,11 @@ namespace SonequaBot.Commands
 
         public override bool IsActivated(string message)
         {
+            if (message.Length < 5)
+            {
+                return false;
+            }
+
             var activated = message.StartsWith(ActivationCommand.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
 
