@@ -21,7 +21,7 @@ connection.on("ReceiveDio", function() {
     document.getElementById("alertdio").style.display = "block";
     
     const random = randomNumber(1, 3);
-    document.getElementById("sounddio").src = `~/spfx/dio_${random}.mp3`;
+    document.getElementById("sounddio").src = `/spfx/dio_${random}.mp3`;
     document.getElementById("sounddio").play();
 
     setTimeout(removeAlert, 5000);
