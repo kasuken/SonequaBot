@@ -51,6 +51,12 @@ connection.on("ReceiveKasu", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveDebug", function () {
+    document.getElementById("alertdebug").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveExcel", function () {
     document.getElementById("alertexcel").style.display = "block";
 
