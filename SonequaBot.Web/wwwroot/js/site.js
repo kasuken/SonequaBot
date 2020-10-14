@@ -45,6 +45,12 @@ connection.on("ReceiveDisagio", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveKasu", function () {
+    document.getElementById("alertkasu").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveExcel", function () {
     document.getElementById("alertexcel").style.display = "block";
 
