@@ -1,0 +1,29 @@
+version: '3.7'
+
+networks:
+  BOT:
+
+services:
+  bot:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: bot
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports: 
+      - 44336:44336
+    networks:
+      - BOT
+  web:
+    build: 
+      context: .
+      dockerfile: DockerfileWeb
+    container_name: web
+    restart: unless-stopped
+    ports: 
+      - 80:80
+      - 443:443
+    networks:
+      - BOT
