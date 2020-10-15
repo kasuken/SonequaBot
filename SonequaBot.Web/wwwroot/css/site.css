@@ -10,3 +10,22 @@
     display: none;
     transform: translate(-50%, -50%);
 }
+
+.userAppear {
+    display: none;
+    animation: opacityOnAndOff 5s ease 3 normal;
+}
+
+@keyframes opacityOnAndOff {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

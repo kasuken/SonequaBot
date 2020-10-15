@@ -112,9 +112,11 @@ namespace SonequaBot
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
         }
 
-        private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        private async void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
         {
             ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
+
+            await connection.SendAsync("SendUserAppear", e.Username);
 
             _logger.LogWarning($"New user on channel: {e.Username}");
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");

@@ -67,6 +67,17 @@ connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
 
+connection.on("ReceiveUserAppear", function (username) {
+
+    debugger;
+    var element = document.getElementById("userAppear");
+
+    element.querySelector(".username").innerHTML = username;
+
+    element.style.display = "block";
+
+});
+
 connection.on("ReceiveGren", function (sentiment) {
     document.getElementById("alertgren").style.display = "block";
 
@@ -87,7 +98,7 @@ connection.start().then(function () {
 });
 
 function removeAlert() {
-    document.querySelectorAll(".alertgif").forEach(function(item) {
-        item.style.display = "none";
-    });
+    var alerts = document.querySelectorAll(".alertgif");
+
+    alerts.forEach((alert) => { alert.style.display = "none"; });
 }

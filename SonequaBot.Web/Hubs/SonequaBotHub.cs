@@ -77,5 +77,10 @@ namespace SonequaBot.Web.Hubs
         {
             await Clients.All.SendAsync("ReceiveGaugeSentiment", sentiment);
         }
+
+        public async Task SendUserAppear(string username)
+        {
+            await Clients.All.SendAsync("ReceiveUserAppear", username);
+        }
     }
 }
