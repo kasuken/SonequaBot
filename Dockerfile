@@ -15,4 +15,3 @@ FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS runtime
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SonequaBot.dll"]
-EXPOSE 44336

@@ -12,8 +12,6 @@ services:
     restart: unless-stopped
     depends_on:
       - web
-    ports: 
-      - 44336:44336
     networks:
       - BOT
   web:
@@ -24,6 +22,5 @@ services:
     restart: unless-stopped
     ports: 
       - 80:80
-      - 443:443
     networks:
       - BOT
