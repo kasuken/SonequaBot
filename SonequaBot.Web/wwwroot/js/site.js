@@ -69,13 +69,11 @@ connection.on("ReceiveSentiment", function (sentiment) {
 
 connection.on("ReceiveUserAppear", function (username) {
 
-    debugger;
     var element = document.getElementById("userAppear");
-
     element.querySelector(".username").innerHTML = username;
-
     element.style.display = "block";
 
+    setTimeout(removeUserAppears, 10000);
 });
 
 connection.on("ReceiveGren", function (sentiment) {
@@ -101,4 +99,10 @@ function removeAlert() {
     var alerts = document.querySelectorAll(".alertgif");
 
     alerts.forEach((alert) => { alert.style.display = "none"; });
+}
+
+function removeUserAppears() {
+    var divs = document.querySelectorAll("#userAppear");
+
+    divs.forEach((item) => { item.style.display = "none"; });
 }

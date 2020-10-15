@@ -138,10 +138,12 @@ namespace SonequaBot
                         switch (true)
                         {
                             case true when command is IResponseMessage commandMessage:
+                                _logger.LogInformation($"Command fired: {commandMessage.GetMessage(e)}");
                                 client.SendMessage(_options.ChannelName, commandMessage.GetMessage(e));
                                 break;
 
                             case true when command is IResponseVisual commandVisual:
+                                _logger.LogInformation($"Command fired: {commandVisual.GetVisualEvent(e)}");
                                 await connection.SendAsync(commandVisual.GetVisualEvent(e));
                                 break;
                         }

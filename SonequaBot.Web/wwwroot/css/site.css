@@ -13,7 +13,7 @@
 
 .userAppear {
     display: none;
-    animation: opacityOnAndOff 5s ease 3 normal;
+    animation: opacityOnAndOff 5s ease 10 normal;
 }
 
 @keyframes opacityOnAndOff {
