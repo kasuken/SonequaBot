@@ -90,6 +90,9 @@ namespace SonequaBot
             BotCommands.Add(new CommandDio());
             BotCommands.Add(new CommandPaura());
             BotCommands.Add(new CommandKasu());
+            BotCommands.Add(new CommandMerda());
+            BotCommands.Add(new CommandAnsia());
+            BotCommands.Add(new CommandAccompagnare());
         }
 
         private void InitializeBot()
