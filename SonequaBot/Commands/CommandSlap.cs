@@ -14,10 +14,15 @@ namespace SonequaBot.Commands
         {
             switch (_target.ToLower())
             {
+                case "@kasuken":
                 case "kasuken":
                     return $"{e.ChatMessage.DisplayName} sorry, i can't is my creator!";
                 
+                case "@sonequabot":
                 case "sonequabot":
+                case "myself":
+                case "me":
+
                     return $"{e.ChatMessage.DisplayName} hey dude, did you think i slap myself? FY! I slap YOU MF!";
             }
 
@@ -34,24 +39,22 @@ namespace SonequaBot.Commands
             return $"{e.ChatMessage.DisplayName} at your service! I slap {_target}{enrich}.";
         }
 
-        public override bool IsActivated(string message)
-        {
+        public override bool IsActivated(string message){
             if (message.Length < 5)
             {
                 return false;
             }
-
             var activated = message.StartsWith(ActivationCommand.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
+            
+            if(message == "!slap" || message == "!slap ") throw new Exception("!slap command needs a target (ex. !slap Valentino)");
 
-            var match = Regex.Match(message, @"^!slap\s*(\S+)");
+            var match = Regex.Match(message, @"^!slap \s*(\S+)");
             if (match.Success)
             {
                 _target = match.Groups[1].Value;
                 return true;
-            }
-
-            throw new Exception("!slap command need a target (ex. !slap Valentino");
+            } else throw new Exception(message + " not a valid command. (Did you mean to use \"!slap\" ?) ");
         }
     }
 }

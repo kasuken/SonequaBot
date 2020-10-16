@@ -112,7 +112,7 @@ namespace SonequaBot
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
         }
 
-        private async void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
         {
             ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
 
@@ -127,8 +127,11 @@ namespace SonequaBot
             client.SendMessage(_options.ChannelName, $"Hi to everyone. I am Sonequabot and I am alive. Again.");
         }
 
+
         private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
         {
+            String invoker = e.ChatMessage.Username;
+
             try
             {
                 foreach (var command in BotCommands)
@@ -138,12 +141,10 @@ namespace SonequaBot
                         switch (true)
                         {
                             case true when command is IResponseMessage commandMessage:
-                                _logger.LogInformation($"Command fired: {commandMessage.GetMessage(e)}");
                                 client.SendMessage(_options.ChannelName, commandMessage.GetMessage(e));
                                 break;
 
                             case true when command is IResponseVisual commandVisual:
-                                _logger.LogInformation($"Command fired: {commandVisual.GetVisualEvent(e)}");
                                 await connection.SendAsync(commandVisual.GetVisualEvent(e));
                                 break;
                         }
@@ -155,7 +156,7 @@ namespace SonequaBot
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                //client.SendWhisper(e.ChatMessage.Username, ex.Message);
+                client.SendWhisper(invoker,ex.Message);
             }
 
             await ProcessSentiment(e);
