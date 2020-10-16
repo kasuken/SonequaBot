@@ -57,6 +57,24 @@ connection.on("ReceiveDebug", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveMerda", function () {
+    document.getElementById("alertmerda").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
+connection.on("ReceiveAccompagnare", function () {
+    document.getElementById("alertaccompagnare").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
+connection.on("ReceiveAnsia", function () {
+    document.getElementById("alertansia").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveExcel", function () {
     document.getElementById("alertexcel").style.display = "block";
 
