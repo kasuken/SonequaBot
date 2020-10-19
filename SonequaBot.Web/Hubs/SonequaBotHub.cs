@@ -78,6 +78,11 @@ namespace SonequaBot.Web.Hubs
             await Clients.All.SendAsync("ReceiveDebug");
         }
 
+        public async Task SendZinghero()
+        {
+            await Clients.All.SendAsync("ReceiveZinghero");
+        }
+        
         public async Task SendMessage(string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
