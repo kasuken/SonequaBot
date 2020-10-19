@@ -101,6 +101,7 @@ namespace SonequaBot
             BotCommands.Add(new CommandMerda());
             BotCommands.Add(new CommandAnsia());
             BotCommands.Add(new CommandAccompagnare());
+            BotCommands.Add(new CommandZinghero());
         }
 
         private void InitializeBot()

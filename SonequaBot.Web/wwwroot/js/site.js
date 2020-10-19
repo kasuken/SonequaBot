@@ -81,6 +81,12 @@ connection.on("ReceiveExcel", function () {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveZinghero", function () {
+    document.getElementById("alertzinghero").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.on("ReceiveSentiment", function (sentiment) {
     document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
 });
