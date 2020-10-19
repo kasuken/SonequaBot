@@ -62,7 +62,15 @@ namespace SonequaBot
         {
             Connect();
 
-            await connection.StartAsync();
+            try
+            {
+                await connection.StartAsync();
+                _logger.LogInformation("Connection started");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
         internal void Connect()
