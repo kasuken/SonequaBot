@@ -1,5 +1,6 @@
 using System;
 using SonequaBot.Commands.Interfaces;
+using SonequaBot.Commands.Exceptions;
 
 namespace SonequaBot.Commands
 {
@@ -20,13 +21,25 @@ namespace SonequaBot.Commands
 
         public virtual bool IsActivated(string message)
         {
-            switch (GetComparisonMethod())
-            {
-                case CommandActivationComparison.StartsWith:
-                    return message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase);
+            if(message.Contains(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase)){
+                switch (GetComparisonMethod()){
 
-                case CommandActivationComparison.Contains:
-                    return message.Contains(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase);
+                    case CommandActivationComparison.Contains:
+                        return true;
+
+                    case CommandActivationComparison.StartsWith:
+                        if(message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase)) 
+                            return true;
+                        else
+                            throw new CommandException(CommandException.CommandNotValidSuggest,message,ActivationCommand);
+                    case CommandActivationComparison.Exactly:
+                        if(message == ActivationCommand)
+                            return true;
+                        else 
+                            throw new CommandException(CommandException.CommandNotValidSuggest,message,ActivationCommand);
+                    default:
+                        return false;
+                }
             }
 
             return false;
