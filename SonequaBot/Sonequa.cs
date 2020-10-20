@@ -6,6 +6,7 @@ using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Interfaces.Responses;
 using SonequaBot.Models;
 using SonequaBot.Services;
+using SonquaBot.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -8,6 +8,7 @@ using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SonequaBot.Discord.Commands;
+using SonquaBot.Shared;
 
 namespace SonequaBot.Discord
 {
@@ -18,13 +19,13 @@ namespace SonequaBot.Discord
 
         private readonly ILogger<SonequaDiscord> _logger;
 
-        public SonequaDiscord(ILogger<SonequaDiscord> logger)
+        public SonequaDiscord(ILogger<SonequaDiscord> logger, SonequaSettings options)
         {
             _logger = logger;
 
             _discordClient = new DiscordClient(new DiscordConfiguration
             {
-                Token = "NzYxMjI0Njg4MDcyMjYxNjQz.X3XfvA.nQHHtTztcze0wKP2lZQedRHcvOo",
+                Token = options.BotToken,
                 TokenType = TokenType.Bot,
                 UseInternalLogHandler = true,
                 LogLevel = DSharpPlus.LogLevel.Debug
