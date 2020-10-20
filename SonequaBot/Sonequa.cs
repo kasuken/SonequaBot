@@ -6,6 +6,7 @@ using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Interfaces.Responses;
 using SonequaBot.Models;
 using SonequaBot.Services;
+using SonquaBot.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,15 @@ namespace SonequaBot
         {
             Connect();
 
-            await connection.StartAsync();
+            try
+            {
+                await connection.StartAsync();
+                _logger.LogInformation("Connection started");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
         internal void Connect()
@@ -90,6 +99,10 @@ namespace SonequaBot
             BotCommands.Add(new CommandDio());
             BotCommands.Add(new CommandPaura());
             BotCommands.Add(new CommandKasu());
+            BotCommands.Add(new CommandMerda());
+            BotCommands.Add(new CommandAnsia());
+            BotCommands.Add(new CommandAccompagnare());
+            BotCommands.Add(new CommandZinghero());
         }
 
         private void InitializeBot()

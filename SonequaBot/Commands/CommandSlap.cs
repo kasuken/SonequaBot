@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using SonequaBot.Commands.Interfaces.Responses;
 using TwitchLib.Client.Events;
+using SonequaBot.Commands.Exceptions;
 
 namespace SonequaBot.Commands
 {
@@ -47,14 +48,14 @@ namespace SonequaBot.Commands
             var activated = message.StartsWith(ActivationCommand.Substring(0, 5), StringComparison.InvariantCultureIgnoreCase);
             if (!activated) return false;
             
-            if(message == "!slap" || message == "!slap ") throw new Exception("!slap command needs a target (ex. !slap Valentino)");
+            if(message == "!slap" || message == "!slap ") throw new CommandException(message: CommandException.CommandNeedsStringArgument, input: message, command: "!slap");
 
             var match = Regex.Match(message, @"^!slap \s*(\S+)");
             if (match.Success)
             {
                 _target = match.Groups[1].Value;
                 return true;
-            } else throw new Exception(message + " not a valid command. (Did you mean to use \"!slap\" ?) ");
+            } else throw new CommandException(message: CommandException.CommandNotValidSuggest, input: message, command: "!slap");
         }
     }
 }

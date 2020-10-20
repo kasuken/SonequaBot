@@ -3,7 +3,8 @@ namespace SonequaBot.Commands.Interfaces
     public enum CommandActivationComparison
     {
         StartsWith = 0,
-        Contains = 1
+        Contains = 1,
+        Exactly = 2,
     }
 
     public interface ICommand

@@ -12,10 +12,10 @@ namespace SonequaBot.Web.Hubs
         {
             return base.OnConnectedAsync();
         }
-
+        
         public async Task SendTask(string message, string detail = "default"){
-            string receivedTask = "Receive" + message;
 
+            string receivedTask = "Receive" + message;
             if(detail != "default"){
                 await Clients.All.SendAsync(receivedTask);
             } else 
