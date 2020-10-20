@@ -112,11 +112,11 @@ namespace SonequaBot
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
         }
 
-        private void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        private async void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
         {
             ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
 
-            await connection.SendAsync("SendUserAppear", e.Username);
+            await connection.SendAsync("SendTask","SendUserAppear", e.Username);
 
             _logger.LogWarning($"New user on channel: {e.Username}");
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
@@ -145,7 +145,7 @@ namespace SonequaBot
                                 break;
 
                             case true when command is IResponseVisual commandVisual:
-                                await connection.SendAsync(commandVisual.GetVisualEvent(e));
+                                await connection.SendAsync("SendTask",commandVisual.GetVisualEvent(e));
                                 break;
                         }
                         
@@ -178,7 +178,7 @@ namespace SonequaBot
 
             var currentScore = _sentimentAnalysisService.ElaborateSentence(e.ChatMessage.Message);
 
-            await connection.SendAsync("Sentiment", currentScore.GetSentiment().ToString().ToLower());
+            await connection.SendAsync("SendTask","Sentiment",currentScore.GetSentiment().ToString().ToLower());
 
             var currentUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
             {
@@ -245,7 +245,7 @@ namespace SonequaBot
                                        (currentChatSentiment.Negative - currentChatSentiment.Neutral);
             _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
 
-            await connection.SendAsync("GaugeSentiment", absoluteSentiment);
+            await connection.SendAsync("SendTask","GaugeSentiment", absoluteSentiment);
         }
     }
 }
