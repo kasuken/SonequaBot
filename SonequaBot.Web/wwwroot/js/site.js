@@ -100,7 +100,7 @@ connection.on("ReceiveUserAppear", function (username) {
     setTimeout(removeUserAppears, 10000);
 });
 
-connection.on("ReceiveGren", function (sentiment) {
+connection.on("ReceiveGren", function () {
     document.getElementById("alertgren").style.display = "block";
 
     setTimeout(removeAlert, 5000);
