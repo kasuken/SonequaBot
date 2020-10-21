@@ -39,4 +39,4 @@ jobs:
       uses: srijken/azure-zip-deploy@v1.0.1
       with:
         zip-file: ${{env.ZIP_FILEPATH}}
-        publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+        publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE }}
