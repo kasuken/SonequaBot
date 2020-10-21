@@ -1,10 +1,10 @@
 name: Bot Deploy
 
 env:
-  BINARIES: './output/app_data/jobs/continuous/mywebjob'
-  ZIP_FILE: 'webjob.zip'
+  BINARIES: './output/app_data/jobs/continuous/SonequaBot.Discord'
+  ZIP_FILE: 'SonequaBot.Discord.zip'
   ZIP_PATH: './output'
-  ZIP_FILEPATH: './output/webjob.zip'
+  ZIP_FILEPATH: './output/SonequaBot.Discord.zip'
 
 on:
   push:
