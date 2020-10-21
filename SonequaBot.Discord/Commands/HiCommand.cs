@@ -8,12 +8,12 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace SonequaBot.Discord.Commands
 {
-    public class SlapCommand
+    public class HiCommand
     {
         [Command("hi")]
         public async Task Hi(CommandContext ctx)
         {
-            await ctx.RespondAsync($"👋 Hi, {ctx.User.Mention} from actions!");
+            await ctx.RespondAsync($"👋 Hi, {ctx.User.Mention}!");
         }
     }
 }

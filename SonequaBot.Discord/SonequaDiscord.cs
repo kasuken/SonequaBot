@@ -36,7 +36,8 @@ namespace SonequaBot.Discord
                 StringPrefix = "!"
             });
 
-            _commands.RegisterCommands<SlapCommand>();
+            _commands.RegisterCommands<HiCommand>();
+            _commands.RegisterCommands<BucoCommand>();
 
             _discordClient.ConnectAsync().GetAwaiter().GetResult();
             Task.Delay(-1).GetAwaiter().GetResult();
