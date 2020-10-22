@@ -1,4 +1,4 @@
-name: Bot Deploy
+name: Web Deploy
 
 env:
   BINARIES: './output/'
