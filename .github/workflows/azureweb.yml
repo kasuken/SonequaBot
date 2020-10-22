@@ -1,0 +1,42 @@
+name: Bot Deploy
+
+env:
+  BINARIES: './output/'
+  ZIP_FILE: 'SonequaBot.Web.zip'
+  ZIP_PATH: './output'
+  ZIP_FILEPATH: './output/SonequaBot.Web.zip'
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+
+    - name: Install dependencies
+      run: dotnet restore ./SonequaBot.Web/SonequaBot.Web.csproj
+
+    - name: Build
+      run: dotnet build ./SonequaBot.Web/SonequaBot.Web.csproj --configuration Release --no-restore --output ${{env.BINARIES}}
+
+    - name: Zip
+      uses: nguyenquyhy/zip-release@v0.3.0
+      with:
+        filename: '${{env.ZIP_FILE}}'
+        workingDirectory:  ${{env.ZIP_PATH}}
+        exclusions: 'worker.exe app_data/**/unix/*'
+
+    - name: Deploy to Production
+      uses: srijken/azure-zip-deploy@v1.0.1
+      with:
+        zip-file: ${{env.ZIP_FILEPATH}}
+        publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE }}
