@@ -1,9 +1,9 @@
 name: Web Deploy
 
 env:
-  BINARIES: './'
+  BINARIES: './output'
   ZIP_FILE: 'SonequaBot.Web.zip'
-  ZIP_PATH: './'
+  ZIP_PATH: './output'
   ZIP_FILEPATH: './output/SonequaBot.Web.zip'
 
 on:
