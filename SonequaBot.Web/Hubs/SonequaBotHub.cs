@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SonequaBot.Web.Hubs
@@ -13,13 +10,16 @@ namespace SonequaBot.Web.Hubs
             return base.OnConnectedAsync();
         }
 
-        public async Task SendTask(string message, string detail = "default"){
+        public async Task SendTask(string message, string detail = "default")
+        {
+            string receivedTask = message.Replace("Send", "Receive");
 
-            string receivedTask = "Receive" + message;
-            if(detail == "default"){
+            if (detail == "default")
+            {
                 await Clients.All.SendAsync(receivedTask);
-            } else 
-                await Clients.All.SendAsync(receivedTask,detail);
+            }
+            else
+                await Clients.All.SendAsync(receivedTask, detail);
         }
     }
 }
