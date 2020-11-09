@@ -59,6 +59,7 @@ connection.on("ReceiveDebug", function () {
 
 connection.on("ReceiveMerda", function () {
     document.getElementById("alertmerda").style.display = "block";
+    document.getElementById("alertmerda").play();
 
     setTimeout(removeAlert, 5000);
 });
