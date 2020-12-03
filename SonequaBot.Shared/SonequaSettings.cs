@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SonquaBot.Shared
+namespace SonequaBot.Shared
 {
     public class SonequaSettings
     {

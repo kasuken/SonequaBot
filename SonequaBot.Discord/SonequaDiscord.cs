@@ -8,7 +8,7 @@ using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SonequaBot.Discord.Commands;
-using SonquaBot.Shared;
+using SonequaBot.Shared;
 
 namespace SonequaBot.Discord
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SonquaSettings
+namespace SonequaSettings
 {
     public class Class1
     {

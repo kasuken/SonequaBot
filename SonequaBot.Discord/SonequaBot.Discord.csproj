@@ -9,11 +9,11 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SonquaBot.Shared\SonquaBot.Shared.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="Settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SonequaBot.Shared\SonequaBot.Shared.csproj" />
   </ItemGroup>
 </Project>

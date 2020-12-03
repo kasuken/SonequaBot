@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SonequaBot.Services;
-using SonquaBot.Shared;
+using SonequaBot.Shared;
 
 namespace SonequaBot
 {
