@@ -11,12 +11,12 @@ namespace SonequaBot.Services
 {
     public class SentimentAnalysisService
     {
-        private static readonly AzureKeyCredential credentials = new AzureKeyCredential("693c2c2d8c5b4e02b26bc0e8db644700");
-        private static readonly Uri endpoint = new Uri("https://sonequabot.cognitiveservices.azure.com/");
+        private static readonly AzureKeyCredential Credentials = new AzureKeyCredential("693c2c2d8c5b4e02b26bc0e8db644700");
+        private static readonly Uri Endpoint = new Uri("https://sonequabot.cognitiveservices.azure.com/");
 
         public SentimentScores ElaborateSentence(string sentence)
         {
-            var client = new TextAnalyticsClient(endpoint, credentials);
+            var client = new TextAnalyticsClient(Endpoint, Credentials);
 
             DocumentSentiment documentSentiment = client.AnalyzeSentiment(sentence, "it");
             Console.WriteLine($"Sentence sentiment: {documentSentiment.Sentiment}\n");

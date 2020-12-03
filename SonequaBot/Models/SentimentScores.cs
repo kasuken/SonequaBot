@@ -14,16 +14,16 @@ namespace SonequaBot.Models
             Mixed = 3
         }
 
-        private TextSentiment textSentiment;
+        private TextSentiment _textSentiment;
 
         public void SetSentiment(TextSentiment value)
         {
-            textSentiment = value;
+            _textSentiment = value;
         }
 
         public TextSentiment GetSentiment()
         {
-            return textSentiment;
+            return _textSentiment;
         }
 
         public double Positive { get; set; }

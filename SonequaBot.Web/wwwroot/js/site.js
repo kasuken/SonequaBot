@@ -114,6 +114,12 @@ connection.on("ReceivePaura", function() {
     setTimeout(removeAlert, 5000);
 });
 
+connection.on("ReceiveBuco", function () {
+    document.getElementById("alertbuco").style.display = "block";
+
+    setTimeout(removeAlert, 5000);
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {
