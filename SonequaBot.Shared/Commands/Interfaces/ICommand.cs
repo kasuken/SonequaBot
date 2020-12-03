@@ -4,7 +4,7 @@ namespace SonequaBot.Commands.Interfaces
     {
         StartsWith = 0,
         Contains = 1,
-        Exactly = 2,
+        Exactly = 2
     }
 
     public interface ICommand

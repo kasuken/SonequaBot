@@ -1,4 +1,8 @@
 using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Exceptions;
 

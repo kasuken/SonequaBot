@@ -51,11 +51,14 @@ namespace SonequaBot.Commands
             if(message == "!slap" || message == "!slap ") throw new CommandException(message: CommandException.CommandNeedsStringArgument, input: message, command: "!slap");
 
             var match = Regex.Match(message, @"^!slap \s*(\S+)");
-            if (match.Success)
+            
+            if (false == match.Success) 
             {
-                _target = match.Groups[1].Value;
-                return true;
-            } else throw new CommandException(message: CommandException.CommandNotValidSuggest, input: message, command: "!slap");
+                throw new CommandException(message: CommandException.CommandNotValidSuggest, input: message, command: "!slap");
+            }
+            
+            _target = match.Groups[1].Value;
+            return true;
         }
     }
 }
