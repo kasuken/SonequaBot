@@ -6,7 +6,7 @@ using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Interfaces.Responses;
 using SonequaBot.Models;
 using SonequaBot.Services;
-using SonquaBot.Shared;
+using SonequaBot.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -256,7 +256,7 @@ namespace SonequaBot
             // interesting can be used with a gauge or a vertical meter that can go from -1 to 1
             double absoluteSentiment = (currentChatSentiment.Positive - currentChatSentiment.Neutral) -
                                        (currentChatSentiment.Negative - currentChatSentiment.Neutral);
-            _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
+            _logger.LogInformation(string.Concat("(", sentimentScores.Count.ToString(), ")", " - Absolute sentiment:", absoluteSentiment));
 
             await connection.SendAsync("SendTask", "SendGaugeSentiment", absoluteSentiment);
         }
