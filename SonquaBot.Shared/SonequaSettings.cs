@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace SonquaBot.Shared
+﻿namespace SonequaBot.Shared
 {
     public class SonequaSettings
     {
-
         public string SonequaWebUrl { get; set; }
 
         public string BotToken { get; set; }
@@ -15,5 +12,8 @@ namespace SonquaBot.Shared
 
         public string ClientId { get; set; }
 
+        public string CognitiveAzureKey { get; set; }
+
+        public string CognitiveEndPoint { get; set; }
     }
 }

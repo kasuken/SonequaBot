@@ -1,17 +1,19 @@
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SonequaBot.Commands;
-using SonequaBot.Commands.Interfaces;
-using SonequaBot.Commands.Interfaces.Responses;
-using SonequaBot.Models;
-using SonequaBot.Services;
-using SonquaBot.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SonequaBot.Sentiment.Processors;
+using SonequaBot.Services;
+using SonequaBot.Shared;
+using SonequaBot.Shared.Commands;
+using SonequaBot.Shared.Commands.Interfaces;
+using SonequaBot.Shared.Commands.Interfaces.Responses;
 using TwitchLib.Api;
 using TwitchLib.Client;
 using TwitchLib.Client.Events;
@@ -23,24 +25,25 @@ namespace SonequaBot
     {
         private readonly ILogger<Sonequa> _logger;
 
-        readonly ConnectionCredentials connectionCredentials;
-        private readonly TwitchClient client = new TwitchClient();
-        readonly TwitchAPI twitchAPI = new TwitchAPI();
-
-        private readonly string[] BotUsers = new string[] { "sonequabot", "streamelements" };
-
-        Dictionary<string, ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
-
-        List<ICommand> BotCommands = new List<ICommand>();
-        private readonly HubConnection connection;
-
         private readonly SonequaSettings _options;
 
-        private readonly SentimentAnalysisService _sentimentAnalysisService;
-        private List<SentimentScores> sentimentScores = new List<SentimentScores>();
-        private SentimentScores currentChatSentiment = new SentimentScores();
+        private readonly Sentiment.Sentiment _sentiment;
 
-        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options, SentimentAnalysisService sentimentAnalysisService)
+        private readonly SentimentAnalysisService _sentimentAnalysisService;
+
+        private readonly string[] BotUsers = {"sonequabot", "streamelements"};
+        private readonly TwitchClient client = new TwitchClient();
+        private readonly HubConnection connection;
+
+        private readonly ConnectionCredentials connectionCredentials;
+        private readonly TwitchAPI twitchAPI = new TwitchAPI();
+
+        private readonly List<ICommand> BotCommands = new List<ICommand>();
+
+        private readonly Dictionary<string, ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
+
+        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options,
+            SentimentAnalysisService sentimentAnalysisService)
         {
             _logger = logger;
             _options = options;
@@ -52,11 +55,20 @@ namespace SonequaBot
                 .WithUrl(_options.SonequaWebUrl)
                 .Build();
 
-            connection.Closed += async (error) =>
+            connection.Closed += async error =>
             {
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await connection.StartAsync();
             };
+
+            var sentimentProcessor = new ProcessorCognitive(
+                new AzureKeyCredential(options.CognitiveAzureKey),
+                new Uri(options.CognitiveEndPoint)
+            );
+
+            _sentiment = new Sentiment.Sentiment(
+                sentimentProcessor
+            );
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -86,23 +98,18 @@ namespace SonequaBot
 
         private void InitializeBotCommands()
         {
-            //BotCommands.Add(new CommandHi()); Not needed in twitch
-            BotCommands.Add(new CommandJava()); ;
-            BotCommands.Add(new CommandPhp());
-            BotCommands.Add(new CommandDevastante());
-            BotCommands.Add(new CommandSlap());
-            BotCommands.Add(new CommandDiceRoll());
-            BotCommands.Add(new CommandFriday());
-            BotCommands.Add(new CommandDisagio());
-            BotCommands.Add(new CommandGren());
-            BotCommands.Add(new CommandDebug());
-            BotCommands.Add(new CommandDio());
-            BotCommands.Add(new CommandPaura());
-            BotCommands.Add(new CommandKasu());
-            BotCommands.Add(new CommandMerda());
-            BotCommands.Add(new CommandAnsia());
-            BotCommands.Add(new CommandAccompagnare());
-            BotCommands.Add(new CommandZinghero());
+            List<Type> types = Assembly.Load("SonequaBot.Shared").GetTypes()
+                .Where(t => t.Namespace == "SonequaBot.Shared.Commands")
+                .ToList();
+            
+            foreach (Type fqcnType in types)
+            {
+                if (fqcnType.BaseType != null && fqcnType.BaseType == typeof(CommandBase))
+                {
+                    _logger.LogInformation("Load BotCommand : " +  fqcnType.ToString());
+                    BotCommands.Add((ICommand) Activator.CreateInstance(fqcnType));
+                }
+            }
         }
 
         private void InitializeBot()
@@ -117,7 +124,7 @@ namespace SonequaBot
             client.OnMessageReceived += Client_OnMessageReceived;
         }
 
-        private void Client_OnUserLeft(object sender, TwitchLib.Client.Events.OnUserLeftArgs e)
+        private void Client_OnUserLeft(object sender, OnUserLeftArgs e)
         {
             ConnectedUsers.Remove(e.Username);
 
@@ -125,7 +132,7 @@ namespace SonequaBot
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
         }
 
-        private async void Client_OnUserJoined(object sender, TwitchLib.Client.Events.OnUserJoinedArgs e)
+        private async void Client_OnUserJoined(object sender, OnUserJoinedArgs e)
         {
             ConnectedUsers.Add(e.Username, new ConnectedUser(e.Username));
 
@@ -135,41 +142,50 @@ namespace SonequaBot
             _logger.LogWarning($"Total user on channel: {ConnectedUsers.Count}");
         }
 
-        private void Client_OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
+        private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
-            client.SendMessage(_options.ChannelName, $"Hi to everyone. I am Sonequabot and I am alive. Again.");
+            client.SendMessage(_options.ChannelName, "Hi to everyone. I am Sonequabot and I am alive. Again.");
         }
 
 
-        private async void Client_OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
+        private async void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            String invoker = e.ChatMessage.Username;
+            var source = new CommandSource
+            {
+                Channel = e.ChatMessage.Channel,
+                Message = e.ChatMessage.Message,
+                User = e.ChatMessage.Username
+            };
+
+            if (Array.Exists(BotUsers, element => element == source.User)) return;
 
             try
             {
                 foreach (var command in BotCommands)
-                {
-                    if (command.IsActivated(e.ChatMessage.Message))
+                    if (command.IsActivated(source))
                     {
-                        switch (true)
-                        {
-                            case true when command is IResponseMessage commandMessage:
-                                client.SendMessage(_options.ChannelName, commandMessage.GetMessage(e));
-                                break;
+                        if (command is IResponseMessage messageText)
+                            client.SendMessage(_options.ChannelName, messageText.GetMessageEvent(source));
 
-                            case true when command is IResponseVisual commandVisual:
-                                await connection.SendAsync("SendTask", commandVisual.GetVisualEvent(e), "");
-                                break;
-                        }
+                        if (command is IResponseImage messageImage)
+                            await connection.SendAsync(
+                                "CreateImage", messageImage.GetImageEvent(source), "");
+
+                        if (command is IResponseVideo messageVideo)
+                            await connection.SendAsync(
+                                "CreateVideo", messageVideo.GetVideoEvent(source), "");
+
+                        if (command is IResponseAudio messageAudio)
+                            await connection.SendAsync(
+                                "CreateAudio", messageAudio.GetAudioEvent(source), "");
 
                         return; // if activated exit, if not multiple sentiment of !devastante will be UBER negative 
                     }
-                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                client.SendWhisper(invoker, ex.Message);
+                client.SendWhisper(source.User, ex.Message);
             }
 
             await ProcessSentiment(e);
@@ -177,88 +193,16 @@ namespace SonequaBot
 
         private async Task ProcessSentiment(OnMessageReceivedArgs e)
         {
-            // to remove noise 
-            if (e.ChatMessage.Message.Length < 10)
-            {
-                return;
-            }
+            _sentiment.AddMessage(e.ChatMessage.Message);
 
-            // limit number of stored SentimentScores to react quickly to changes 
-            if (sentimentScores.Count > 10)
-            {
-                sentimentScores.RemoveAt(0);
-            }
+            _logger.LogInformation("SENTIMENT");
+            _logger.LogInformation("Absolute : " + _sentiment.GetSentimentAbsolute());
+            _logger.LogInformation("Last label : " + _sentiment.GetSentimentLastLabel());
+            _logger.LogInformation("Average : " + _sentiment.GetSentimentAverage());
 
-            var currentScore = _sentimentAnalysisService.ElaborateSentence(e.ChatMessage.Message);
-
-            await connection.SendAsync("SendTask", "SendSentiment", currentScore.GetSentiment().ToString().ToLower());
-
-            var currentUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
-            {
-                {SentimentScores.TextSentiment.Positive, currentScore.Positive},
-                {SentimentScores.TextSentiment.Neutral, currentScore.Neutral},
-                {SentimentScores.TextSentiment.Negative, currentScore.Negative},
-            };
-
-            var currentRankedSentiment = currentUnrankedSentiment.OrderBy(item => item.Value);
-
-            _logger.LogInformation(string.Concat(
-                    "currentScore:",
-                    Environment.NewLine,
-                    string.Join(
-                        Environment.NewLine,
-                        currentRankedSentiment.Select(a => $"{a.Key}: {a.Value}")
-                    )
-                )
-            );
-
-            var processedSentiment = new SentimentScores();
-            switch (currentRankedSentiment.Last().Key)
-            {
-                case SentimentScores.TextSentiment.Positive:
-                    processedSentiment.Positive = currentRankedSentiment.Last().Value;
-                    break;
-                case SentimentScores.TextSentiment.Neutral:
-                    processedSentiment.Neutral = currentRankedSentiment.Last().Value;
-                    break;
-                case SentimentScores.TextSentiment.Negative:
-                    processedSentiment.Negative = currentRankedSentiment.Last().Value;
-                    break;
-            }
-
-            sentimentScores.Add(processedSentiment);
-
-            var chatUnrankedSentiment = new Dictionary<SentimentScores.TextSentiment, double>
-            {
-                {SentimentScores.TextSentiment.Positive, sentimentScores.Average(c => c.Positive)},
-                {SentimentScores.TextSentiment.Neutral, sentimentScores.Average(c => c.Neutral)},
-                {SentimentScores.TextSentiment.Negative, sentimentScores.Average(c => c.Negative)},
-            };
-
-            var chatRankedSentiment = chatUnrankedSentiment.OrderBy(item => item.Value);
-
-            // set current chat sentiment with values
-            currentChatSentiment.SetSentiment(chatRankedSentiment.Last().Key);
-            currentChatSentiment.Positive = chatUnrankedSentiment[SentimentScores.TextSentiment.Positive];
-            currentChatSentiment.Neutral = chatUnrankedSentiment[SentimentScores.TextSentiment.Neutral];
-            currentChatSentiment.Negative = chatUnrankedSentiment[SentimentScores.TextSentiment.Negative];
-
-            _logger.LogInformation(string.Concat(
-                    "Chat sentiment:",
-                    Environment.NewLine,
-                    string.Join(
-                        Environment.NewLine,
-                        chatRankedSentiment.Select(a => $"{a.Key}: {a.Value}")
-                    )
-                )
-            );
-
-            // interesting can be used with a gauge or a vertical meter that can go from -1 to 1
-            double absoluteSentiment = (currentChatSentiment.Positive - currentChatSentiment.Neutral) -
-                                       (currentChatSentiment.Negative - currentChatSentiment.Neutral);
-            _logger.LogInformation(string.Concat("Absolute sentiment:", absoluteSentiment));
-
-            await connection.SendAsync("SendTask", "SendGaugeSentiment", absoluteSentiment);
+            await connection.SendAsync("SendTask", "SendSentiment",
+                _sentiment.GetSentimentLastLabel().ToString().ToLower());
+            await connection.SendAsync("SendTask", "SendGaugeSentiment", _sentiment.GetSentimentAbsolute());
         }
     }
 }

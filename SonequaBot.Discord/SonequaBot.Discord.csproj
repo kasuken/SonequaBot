@@ -4,12 +4,12 @@
     <UserSecretsId>dotnet-SonequaBot.Discord-76E99DEC-8058-4822-A939-3CA6AC8614A8</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="3.2.3" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
+    <PackageReference Include="DSharpPlus" Version="4.0.0-rc1" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-rc1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SonquaBot.Shared\SonquaBot.Shared.csproj" />
+    <ProjectReference Include="..\SonquaBot.Shared\SonequaBot.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Settings.job">
