@@ -97,7 +97,12 @@ namespace SonequaBot.Sentiment
         /// </summary>
         public SentimentMessage GetSentimentLast()
         {
-            if (_history.GetAll().Count == 0) return new SentimentMessage("");
+            if (_history.GetAll().Count == 0)
+            {
+                var message = new SentimentMessage("");
+                    message.Process(_processor);
+                return message;
+            }
             
             return _history.GetLast();
         }

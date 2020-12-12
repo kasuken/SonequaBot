@@ -31,12 +31,6 @@ namespace SonequaBot.Tests.Sentiment
         {
             var sentiment = getSentimentFixed(1, 10, 10);
             var message = new Lorem("it").Sentence(3);
-            var score = new SentimentScore
-            {
-                Positive = 1,
-                Negative = 1,
-                Neutral = 1
-            };
 
             sentiment.AddMessage(message);
 
@@ -48,6 +42,18 @@ namespace SonequaBot.Tests.Sentiment
             Assert.Equal("Neutral", GetReflectionHistory(sentiment).GetLast().GetSentimentLabel().ToString());
         }
 
+        [Fact]
+        public void TestSentimentWhenEmpty()
+        {
+            var sentiment = getSentimentFixed(0, 10, 10);
+
+            Assert.Equal(0, sentiment.GetSentimentLast().GetScore().Positive);
+            Assert.Equal(0, sentiment.GetSentimentLast().GetScore().Negative);
+            Assert.Equal(0, sentiment.GetSentimentLast().GetScore().Neutral);
+            
+            Assert.Equal(SonequaBot.Sentiment.Sentiment.TextSentiment.Neutral, sentiment.GetSentimentLastLabel());
+        }
+        
         [Fact]
         public void TestSentimentExceptionCallProcessTwice()
         {
@@ -80,7 +86,22 @@ namespace SonequaBot.Tests.Sentiment
                 sentiment.AddMessage(new Lorem("it").Sentence(3));
                 Assert.Equal(x, GetReflectionHistoryLength(sentiment));
             }
+        }
+        
+        [Fact]
+        public void TestSentimentHistoryLengthFixed()
+        {
+            var sentiment = getSentimentFixed(1, 10, 10);
 
+            for (var x = 1; x <= 10; x++)
+            {
+                sentiment.AddMessage(new Lorem("it").Sentence(3));
+                Assert.Equal(x, GetReflectionHistoryLength(sentiment));
+            }
+
+            // extra message 
+            sentiment.AddMessage(new Lorem("it").Sentence(3));
+            
             // check if hit the limit
             Assert.Equal(10, GetReflectionHistoryLength(sentiment));
         }
