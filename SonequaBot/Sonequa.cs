@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SonequaBot.Sentiment.Processors;
-using SonequaBot.Services;
 using SonequaBot.Shared;
 using SonequaBot.Shared.Commands;
 using SonequaBot.Shared.Commands.Interfaces;
@@ -29,9 +28,8 @@ namespace SonequaBot
 
         private readonly Sentiment.Sentiment _sentiment;
 
-        private readonly SentimentAnalysisService _sentimentAnalysisService;
-
         private readonly string[] BotUsers = {"sonequabot", "streamelements"};
+        
         private readonly TwitchClient client = new TwitchClient();
         private readonly HubConnection connection;
 
@@ -42,12 +40,10 @@ namespace SonequaBot
 
         private readonly Dictionary<string, ConnectedUser> ConnectedUsers = new Dictionary<string, ConnectedUser>();
 
-        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options,
-            SentimentAnalysisService sentimentAnalysisService)
+        public Sonequa(ILogger<Sonequa> logger, SonequaSettings options)
         {
             _logger = logger;
             _options = options;
-            _sentimentAnalysisService = sentimentAnalysisService;
 
             connectionCredentials = new ConnectionCredentials(_options.BotUsername, _options.BotToken);
 
@@ -169,15 +165,15 @@ namespace SonequaBot
 
                         if (command is IResponseImage messageImage)
                             await connection.SendAsync(
-                                "CreateImage", messageImage.GetImageEvent(source), "");
+                                "SendTask", "SendCreateImage", messageImage.GetImageEvent(source));
 
                         if (command is IResponseVideo messageVideo)
                             await connection.SendAsync(
-                                "CreateVideo", messageVideo.GetVideoEvent(source), "");
+                                "SendTask", "SendCreateVideo", messageVideo.GetVideoEvent(source));
 
                         if (command is IResponseAudio messageAudio)
                             await connection.SendAsync(
-                                "CreateAudio", messageAudio.GetAudioEvent(source), "");
+                                "SendTask", "SendCreateAudio", messageAudio.GetAudioEvent(source));
 
                         return; // if activated exit, if not multiple sentiment of !devastante will be UBER negative 
                     }
@@ -195,10 +191,27 @@ namespace SonequaBot
         {
             _sentiment.AddMessage(e.ChatMessage.Message);
 
-            _logger.LogInformation("SENTIMENT");
-            _logger.LogInformation("Absolute : " + _sentiment.GetSentimentAbsolute());
-            _logger.LogInformation("Last label : " + _sentiment.GetSentimentLastLabel());
-            _logger.LogInformation("Average : " + _sentiment.GetSentimentAverage());
+            var report = "LAST MESSAGE" + Environment.NewLine;
+            report += "Label : " + _sentiment.GetSentimentLastLabel() + Environment.NewLine;
+            report += "POS : " + _sentiment.GetSentimentLast().GetScore().Positive;
+            report += "|";
+            report += "NEG : " + _sentiment.GetSentimentLast().GetScore().Negative;
+            report += "|";
+            report += "NEU : " + _sentiment.GetSentimentLast().GetScore().Negative + Environment.NewLine;
+
+            report += "AVERAGE SENTIMENT" + Environment.NewLine;
+            report += "Avg POS : " + _sentiment.GetSentimentAverage().Positive;
+            report += "|";
+            report += "Avg NEG : " + _sentiment.GetSentimentAverage().Negative;
+            report += "|";
+            report += "Avg NEU : " + _sentiment.GetSentimentAverage().Neutral + Environment.NewLine;
+
+            report += "Avg Label : " + _sentiment.GetSentimentAverageLabel() + Environment.NewLine;
+            report += "Absolute Index : " + _sentiment.GetSentimentAbsolute();
+            report += "|";
+            report += "Label : " + _sentiment.GetSentimentAbsoluteLabel() + Environment.NewLine;
+                   
+            _logger.LogInformation(report);
 
             await connection.SendAsync("SendTask", "SendSentiment",
                 _sentiment.GetSentimentLastLabel().ToString().ToLower());
