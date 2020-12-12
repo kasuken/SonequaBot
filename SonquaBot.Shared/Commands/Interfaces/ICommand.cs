@@ -1,10 +1,10 @@
-namespace SonequaBot.Commands.Interfaces
+namespace SonequaBot.Shared.Commands.Interfaces
 {
     public enum CommandActivationComparison
     {
         StartsWith = 0,
         Contains = 1,
-        Exactly = 2,
+        Exactly = 2
     }
 
     public interface ICommand
@@ -12,7 +12,7 @@ namespace SonequaBot.Commands.Interfaces
         /**
          * Return true if command is triggered.
          */
-        bool IsActivated(string message);
+        bool IsActivated(CommandSource source);
 
         /**
          * Get activation string.

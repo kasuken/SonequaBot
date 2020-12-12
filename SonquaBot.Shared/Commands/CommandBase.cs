@@ -1,46 +1,46 @@
 using System;
-using SonequaBot.Commands.Interfaces;
 using SonequaBot.Commands.Exceptions;
+using SonequaBot.Shared.Commands.Interfaces;
 
-namespace SonequaBot.Commands
+namespace SonequaBot.Shared.Commands
 {
     public abstract class CommandBase : ICommand
     {
         /**
          * The Command string for activation.
          */
-        protected abstract string ActivationCommand
-        {
-            get;
-        }
+        protected abstract string ActivationCommand { get; }
 
         /**
          * The Comparison type for activation.
          */
         protected virtual CommandActivationComparison ActivationComparison => CommandActivationComparison.StartsWith;
 
-        public virtual bool IsActivated(string message)
+        public virtual bool IsActivated(CommandSource source)
         {
-            if(message.Contains(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase)){
-                switch (GetComparisonMethod()){
+            var message = source.Message;
 
+            if (message.Contains(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase))
+                switch (GetComparisonMethod())
+                {
                     case CommandActivationComparison.Contains:
                         return true;
 
                     case CommandActivationComparison.StartsWith:
-                        if(message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase)) 
+                        if (message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase))
                             return true;
                         else
-                            throw new CommandException(CommandException.CommandNotValidSuggest,message,ActivationCommand);
+                            throw new CommandException(CommandException.CommandNotValidSuggest, message,
+                                ActivationCommand);
                     case CommandActivationComparison.Exactly:
-                        if(message == ActivationCommand)
+                        if (message == ActivationCommand)
                             return true;
-                        else 
-                            throw new CommandException(CommandException.CommandNotValidSuggest,message,ActivationCommand);
+                        else
+                            throw new CommandException(CommandException.CommandNotValidSuggest, message,
+                                ActivationCommand);
                     default:
                         return false;
                 }
-            }
 
             return false;
         }
