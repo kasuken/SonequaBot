@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker;Microsoft.NET.Sdk.Publish">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
     <UserSecretsId>dotnet-SonequaBot.Discord-76E99DEC-8058-4822-A939-3CA6AC8614A8</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
