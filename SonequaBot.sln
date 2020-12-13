@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Web", "SonequaBo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Discord", "SonequaBot.Discord\SonequaBot.Discord.csproj", "{997C56CC-0702-4D4F-824C-F0DA27009967}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Shared", "SonquaBot.Shared\SonequaBot.Shared.csproj", "{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Shared", "SonequaBot.Shared\SonequaBot.Shared.csproj", "{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonequaBot.Sentiment", "SonequaBot.Sentiment\SonequaBot.Sentiment.csproj", "{85D66589-A95A-4E1F-BAA0-929D67265589}"
 EndProject

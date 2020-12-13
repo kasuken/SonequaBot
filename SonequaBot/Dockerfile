@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:5.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
 WORKDIR /src
 COPY ["SonequaBot/SonequaBot.csproj", "SonequaBot/"]
 RUN dotnet restore "SonequaBot/SonequaBot.csproj"

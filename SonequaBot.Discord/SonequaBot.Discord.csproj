@@ -9,7 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SonquaBot.Shared\SonequaBot.Shared.csproj" />
+    <ProjectReference Include="..\SonequaBot.Shared\SonequaBot.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Settings.job">

@@ -132,7 +132,18 @@ namespace SonequaBot.Discord
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("SonequaBot is starting.");
 
+            stoppingToken.Register(() => _logger.LogInformation("SonequaBot is stopping."));
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("SonequaBot is doing background work.");
+
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            }
+
+            _logger.LogInformation("SonequaBot background task is stopping.");
         }
     }
 }
