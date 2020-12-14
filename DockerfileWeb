@@ -1,15 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /app
 
-
 COPY . . 
 
 RUN dotnet restore ./SonequaBot.sln
 
 COPY . . 
 
-
-COPY SonequaBot.Web/. ./SonequaBot.Web/
 WORKDIR /app/SonequaBot.Web
 RUN dotnet build SonequaBot.Web.csproj -c Release -o /app/build
 
