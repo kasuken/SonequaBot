@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     environment:
       - "ASPNETCORE_URLS=https://+;http://+"
-      - "ASPNETCORE_ENVIRONMENT=Production"
+      - "DOTNET_ENVIRONMENT=Production"
     depends_on:
       - web
     networks:
