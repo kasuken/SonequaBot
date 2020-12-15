@@ -82,14 +82,16 @@ namespace SonequaBot.Sentiment
         /// <summary>
         /// Add a new message to history.
         /// </summary>
-        public void AddMessage(string message)
+        public bool AddMessage(string message)
         {
-            if (message.Length < _discardLowerThanChar) return;
+            if (message.Length < _discardLowerThanChar) return false;
 
             var processedMessage = new SentimentMessage(message);
             processedMessage.Process(_processor);
 
             _history.AddMessage(processedMessage);
+
+            return true;
         }
 
         /// <summary>
@@ -97,14 +99,10 @@ namespace SonequaBot.Sentiment
         /// </summary>
         public SentimentMessage GetSentimentLast()
         {
-            if (_history.GetAll().Count == 0)
-            {
-                var message = new SentimentMessage("");
-                    message.Process(_processor);
-                return message;
-            }
-            
-            return _history.GetLast();
+            return _history.IsEmpty()
+                ? (new SentimentMessage("")).Process(_processor)
+                : _history.GetLast()
+            ;
         }
 
         /// <summary>
@@ -112,7 +110,7 @@ namespace SonequaBot.Sentiment
         /// </summary>
         public TextSentiment GetSentimentLastLabel()
         {
-            return _history.GetAll().Count == 0
+            return _history.IsEmpty()
                 ? TextSentiment.Neutral
                 : GetSentimentLast().GetSentimentLabel();
         }
@@ -122,9 +120,9 @@ namespace SonequaBot.Sentiment
         /// </summary>
         public SentimentScore GetSentimentAverage()
         {
+            if (_history.IsEmpty()) return new SentimentScore();
+            
             var historyItems = _history.GetAll();
-
-            if (historyItems.Count == 0) return new SentimentScore();
 
             return new SentimentScore
             {

@@ -1,3 +1,4 @@
+using System;
 using SonequaBot.Shared.Commands.Interfaces.Responses;
 
 namespace SonequaBot.Shared.Commands
@@ -13,7 +14,8 @@ namespace SonequaBot.Shared.Commands
 
         public string GetAudioEvent(CommandSource source)
         {
-            return "~/spfx/dio_1.mp3";
+            var rand = (new Random()).Next(1, 3);
+            return $"/spfx/dio_{rand}.mp3";
         }
     }
 }

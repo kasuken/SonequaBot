@@ -13,7 +13,7 @@ namespace SonequaBot.Shared.Commands
 
         public string GetAudioEvent(CommandSource source)
         {
-            return "~/spfx/devastante.mp3";
+            return "/spfx/devastante.mp3";
         }
     }
 }

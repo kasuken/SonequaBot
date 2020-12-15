@@ -46,6 +46,21 @@ connection.on("ReceiveCreateAudio", function(url) {
     },5000)
 });
 
+connection.on("ReceiveSentiment", function (sentiment) {
+    document.getElementById("sentimentImg").src = "/img/" + sentiment + ".png";
+});
+
+connection.on("ReceiveUserAppear", function (username) {
+
+    var element = document.getElementById("userAppear");
+    element.querySelector(".username").innerHTML = username;
+    element.style.display = "block";
+
+    setTimeout(function() {
+        element.style.display = "none";
+    }, 10000);
+});
+
 connection.start().then(function () {
     
 }).catch(function (err) {

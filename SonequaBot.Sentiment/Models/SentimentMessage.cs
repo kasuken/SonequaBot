@@ -16,13 +16,15 @@ namespace SonequaBot.Sentiment.Models
             _message = message;
         }
 
-        public void Process(IProcessor processor)
+        public SentimentMessage Process(IProcessor processor)
         {
             if (null != _score) throw new Exception("Message cannot be processed multiple times");
 
             _score = processor.Process(GetMessage());
 
             _textSentiment = GetRankedLabel(GetScore());
+
+            return this;
         }
 
         public static Sentiment.TextSentiment GetRankedLabel(SentimentScore messageScore)

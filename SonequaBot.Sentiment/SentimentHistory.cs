@@ -29,5 +29,10 @@ namespace SonequaBot.Sentiment
         {
             return new List<SentimentMessage>(_historyMessage);
         }
+
+        public bool IsEmpty()
+        {
+            return _historyMessage.Count == 0;
+        }
     }
 }

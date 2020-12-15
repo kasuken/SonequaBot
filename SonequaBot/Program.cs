@@ -19,7 +19,6 @@ namespace SonequaBot
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            
                 .ConfigureServices((hostContext, services) =>
                 {
                     var configuration = hostContext.Configuration;

@@ -47,6 +47,8 @@ namespace SonequaBot
 
             connectionCredentials = new ConnectionCredentials(_options.BotUsername, _options.BotToken);
 
+            _logger.LogInformation("use SonequaWebUrl:"+_options.SonequaWebUrl);
+            
             connection = new HubConnectionBuilder()
                 .WithUrl(_options.SonequaWebUrl)
                 .Build();
@@ -152,7 +154,7 @@ namespace SonequaBot
                 Message = e.ChatMessage.Message,
                 User = e.ChatMessage.Username
             };
-
+            
             if (Array.Exists(BotUsers, element => element == source.User)) return;
 
             try
@@ -189,7 +191,10 @@ namespace SonequaBot
 
         private async Task ProcessSentiment(OnMessageReceivedArgs e)
         {
-            _sentiment.AddMessage(e.ChatMessage.Message);
+            if (!_sentiment.AddMessage(e.ChatMessage.Message))
+            {   // if not add exit; 
+                return;
+            }
 
             var report = "LAST MESSAGE" + Environment.NewLine;
             report += "Label : " + _sentiment.GetSentimentLastLabel() + Environment.NewLine;
@@ -215,7 +220,9 @@ namespace SonequaBot
 
             await connection.SendAsync("SendTask", "SendSentiment",
                 _sentiment.GetSentimentLastLabel().ToString().ToLower());
-            await connection.SendAsync("SendTask", "SendGaugeSentiment", _sentiment.GetSentimentAbsolute());
+            
+            await connection.SendAsync("SendTask", "SendGaugeSentiment", _sentiment.GetSentimentAbsolute().ToString());
+            await connection.SendAsync("SendTask", "SendAverageSentimentLabel", _sentiment.GetSentimentAbsoluteLabel());
         }
     }
 }
