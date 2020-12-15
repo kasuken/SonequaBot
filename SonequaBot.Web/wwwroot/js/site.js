@@ -2,13 +2,15 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/sonequaBotHub").build();
 
+var rootElement = document.getElementById('outputContainer');
+
 connection.on("ReceiveCreateImage", function(url) {
     var el = document.createElement('img');
         el.setAttribute('class', 'alertgif');
         el.setAttribute('src', url);
         el.style.display = "block";
-        
-    document.body.append(el);
+
+    rootElement.append(el);
     
     setTimeout(function() {
         el.remove();
@@ -22,7 +24,7 @@ connection.on("ReceiveCreateVideo", function(url) {
     cont.setAttribute('src', url);
     cont.style.display = "block";
 
-    document.body.append(cont);
+    rootElement.append(cont);
 
     var el = document.createElement('source');
         el.setAttribute('src', url);
@@ -38,7 +40,9 @@ connection.on("ReceiveCreateVideo", function(url) {
 connection.on("ReceiveCreateAudio", function(url) {
     var el = document.createElement('audio');
         el.setAttribute('src', url);
-    document.body.append(el);
+    
+        rootElement.append(el);
+    
     el.play();
 
     setTimeout(function() {
