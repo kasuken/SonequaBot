@@ -15,7 +15,7 @@ namespace SonequaBot.Shared.Commands
         public string GetAudioEvent(CommandSource source)
         {
             var rand = (new Random()).Next(1, 3);
-            return $"/spfx/dio_{rand}.mp3";
+            return $"https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/spfx/dio_{rand}.mp3";
         }
     }
 }
