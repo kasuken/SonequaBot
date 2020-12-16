@@ -1,20 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
     <UserSecretsId>dotnet-SonequaBot-FED8B3A1-E6A9-4072-908B-404D023B97AE</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.TextAnalytics" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="5.0.0" />
     <PackageReference Include="TwitchLib" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SonquaBot.Shared\SonquaBot.Shared.csproj" />
+    <ProjectReference Include="..\SonequaBot.Sentiment\SonequaBot.Sentiment.csproj" />
+    <ProjectReference Include="..\SonequaBot.Shared\SonequaBot.Shared.csproj" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,9 @@ services:
       dockerfile: Dockerfile
     container_name: bot
     restart: unless-stopped
+    environment:
+      - "ASPNETCORE_URLS=https://+;http://+"
+      - "DOTNET_ENVIRONMENT=Production"
     depends_on:
       - web
     networks:
@@ -20,9 +23,11 @@ services:
       dockerfile: DockerfileWeb
     container_name: web
     restart: unless-stopped
+    environment:
+      - "ASPNETCORE_URLS=https://+;http://+"
+      - "ASPNETCORE_ENVIRONMENT=Production"
     ports: 
-      - 80:80
-      - 443:443
-      - 44336:44336
+      - "5000:80"
+      - "5001:443"
     networks:
       - BOT

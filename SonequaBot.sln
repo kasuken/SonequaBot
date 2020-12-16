@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot", "SonequaBot\So
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Web", "SonequaBot.Web\SonequaBot.Web.csproj", "{AF98D056-DA68-4552-8868-7E12E15080F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonequaBot.Discord", "SonequaBot.Discord\SonequaBot.Discord.csproj", "{997C56CC-0702-4D4F-824C-F0DA27009967}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Discord", "SonequaBot.Discord\SonequaBot.Discord.csproj", "{997C56CC-0702-4D4F-824C-F0DA27009967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonquaBot.Shared", "SonquaBot.Shared\SonquaBot.Shared.csproj", "{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SonequaBot.Shared", "SonequaBot.Shared\SonequaBot.Shared.csproj", "{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonequaBot.Sentiment", "SonequaBot.Sentiment\SonequaBot.Sentiment.csproj", "{85D66589-A95A-4E1F-BAA0-929D67265589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonequaBot.Tests", "SonequaBot.Tests\SonequaBot.Tests.csproj", "{2C7CF04F-14A8-4506-9636-EDB157397F9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9E1EA0D-C6C6-49E2-8E3B-604AF54762BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D66589-A95A-4E1F-BAA0-929D67265589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D66589-A95A-4E1F-BAA0-929D67265589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D66589-A95A-4E1F-BAA0-929D67265589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D66589-A95A-4E1F-BAA0-929D67265589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7CF04F-14A8-4506-9636-EDB157397F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7CF04F-14A8-4506-9636-EDB157397F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7CF04F-14A8-4506-9636-EDB157397F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7CF04F-14A8-4506-9636-EDB157397F9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
