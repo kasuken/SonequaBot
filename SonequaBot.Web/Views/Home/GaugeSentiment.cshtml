@@ -51,7 +51,7 @@
             sentiment_value+=1;
             sentiment_value/=2;
                         
-            gauge4.update((sentiment_value * 100).toFixed(0), getColorForPercentage(sentiment_value));
+            gauge4.update((sentiment_value * 100).toFixed(1), getColorForPercentage(sentiment_value));
     });
     
     connection.on("ReceiveAverageSentimentLabel", function (sentimentLabel) {
