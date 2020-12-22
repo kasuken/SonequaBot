@@ -191,8 +191,16 @@ namespace SonequaBot
 
         private async Task ProcessSentiment(OnMessageReceivedArgs e)
         {
-            if (!_sentiment.AddMessage(e.ChatMessage.Message))
-            {   // if not add exit; 
+            try
+            {
+                if (!_sentiment.AddMessage(e.ChatMessage.Message))
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Message Sentiment Processor failed " + ex.Message);
                 return;
             }
 
