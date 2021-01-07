@@ -29,9 +29,11 @@ namespace SonequaBot.Shared.Commands
                     case CommandActivationComparison.StartsWith:
                         if (message.StartsWith(GetActivationCommand(), StringComparison.InvariantCultureIgnoreCase))
                             return true;
-                        else
-                            throw new CommandException(CommandException.CommandNotValidSuggest, message,
-                                ActivationCommand);
+
+                        return false;
+                        //else
+                        //    throw new CommandException(CommandException.CommandNotValidSuggest, message,
+                        //        ActivationCommand);
                     case CommandActivationComparison.Exactly:
                         if (message == ActivationCommand)
                             return true;

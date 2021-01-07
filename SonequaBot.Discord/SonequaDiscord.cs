@@ -57,12 +57,12 @@ namespace SonequaBot.Discord
         {
             var source = new CommandSource
             {
-                Channel = e.Channel.ToString(),
-                Message = e.Message.ToString(),
+                Channel = e.Channel.Name,
+                Message = e.Message.Content,
                 User = e.Author.Username
             };
 
-            if (Array.Exists(BotUsers, element => element == source.User)) return;
+            if (Array.Exists(BotUsers, element => element.ToLowerInvariant() == source.User.ToLowerInvariant())) return;
 
             try
             {
