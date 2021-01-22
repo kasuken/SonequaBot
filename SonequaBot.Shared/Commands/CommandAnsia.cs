@@ -11,7 +11,7 @@ namespace SonequaBot.Shared.Commands
 
         public string GetImageEvent(CommandSource source)
         {
-            return "https://i.imgur.com/5Zt13Ilh.jpg";
+            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/img/ansia.jpg";
         }
     }
 }
