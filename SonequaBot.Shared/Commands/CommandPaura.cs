@@ -13,7 +13,7 @@ namespace SonequaBot.Shared.Commands
 
         public string GetAudioEvent(CommandSource source)
         {
-            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/spfx/spfx/paura.mp3";
+            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/spfx/paura.mp3";
         }
     }
 }
