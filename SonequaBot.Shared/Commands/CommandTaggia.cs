@@ -9,7 +9,7 @@ namespace SonequaBot.Shared.Commands
 
         public string GetImageEvent(CommandSource source)
         {
-            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/img/taggia.jpg";
+            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/img/taggia.gif";
         }
     }
 }
