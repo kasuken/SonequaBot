@@ -84,14 +84,24 @@ namespace SonequaBot.Sentiment
         /// </summary>
         public bool AddMessage(string message)
         {
-            if (message.Length < _discardLowerThanChar) return false;
+            if (message.Length < _discardLowerThanChar)
+            {
+                return false;
+            }
 
-            var processedMessage = new SentimentMessage(message);
-            processedMessage.Process(_processor);
+            try
+            {
+                var processedMessage = new SentimentMessage(message);
+                processedMessage.Process(_processor);
 
-            _history.AddMessage(processedMessage);
+                _history.AddMessage(processedMessage);
 
-            return true;
+                return true;
+            } catch (Exception e)
+            {
+                // rethrow exception up  
+                throw new Exception("Error during message processing", e);
+            }
         }
 
         /// <summary>
