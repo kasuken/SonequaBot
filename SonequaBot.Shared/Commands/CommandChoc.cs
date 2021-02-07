@@ -2,13 +2,13 @@
 
 namespace SonequaBot.Shared.Commands
 {
-    public class CommandChoc : CommandBase, IResponseVideo
+    public class CommandChoc : CommandBase, IResponseImage
     {
         protected override string ActivationCommand => "!choc";
 
-        public string GetVideoEvent(CommandSource source)
+        public string GetImageEvent(CommandSource source)
         {
-            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/img/choc.mp4";
+            return "https://raw.githubusercontent.com/kasuken/SonequaBot/master/SonequaBot.Web/wwwroot/img/choc.gif";
         }
     }
 }
