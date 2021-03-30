@@ -28,8 +28,8 @@ namespace SonequaBot
 
         private readonly Sentiment.Sentiment _sentiment;
 
-        private readonly string[] BotUsers = {"sonequabot", "streamelements"};
-        
+        private readonly string[] BotUsers = { "sonequabot", "streamelements" };
+
         private readonly TwitchClient client = new TwitchClient();
         private readonly HubConnection connection;
 
@@ -47,8 +47,8 @@ namespace SonequaBot
 
             connectionCredentials = new ConnectionCredentials(_options.BotUsername, _options.BotToken);
 
-            _logger.LogInformation("use SonequaWebUrl:"+_options.SonequaWebUrl);
-            
+            _logger.LogInformation("use SonequaWebUrl:" + _options.SonequaWebUrl);
+
             connection = new HubConnectionBuilder()
                 .WithUrl(_options.SonequaWebUrl)
                 .Build();
@@ -99,13 +99,13 @@ namespace SonequaBot
             List<Type> types = Assembly.Load("SonequaBot.Shared").GetTypes()
                 .Where(t => t.Namespace == "SonequaBot.Shared.Commands")
                 .ToList();
-            
+
             foreach (Type fqcnType in types)
             {
                 if (fqcnType.BaseType != null && fqcnType.BaseType == typeof(CommandBase))
                 {
-                    _logger.LogInformation("Load BotCommand : " +  fqcnType.ToString());
-                    BotCommands.Add((ICommand) Activator.CreateInstance(fqcnType));
+                    _logger.LogInformation("Load BotCommand : " + fqcnType.ToString());
+                    BotCommands.Add((ICommand)Activator.CreateInstance(fqcnType));
                 }
             }
         }
@@ -145,7 +145,6 @@ namespace SonequaBot
             client.SendMessage(_options.ChannelName, "Hi to everyone. I am Sonequabot and I am alive. Again.");
         }
 
-
         private async void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
             var source = new CommandSource
@@ -154,7 +153,7 @@ namespace SonequaBot
                 Message = e.ChatMessage.Message,
                 User = e.ChatMessage.Username
             };
-            
+
             if (Array.Exists(BotUsers, element => element == source.User)) return;
 
             try
@@ -223,12 +222,12 @@ namespace SonequaBot
             report += "Absolute Index : " + _sentiment.GetSentimentAbsolute();
             report += "|";
             report += "Label : " + _sentiment.GetSentimentAbsoluteLabel() + Environment.NewLine;
-                   
+
             _logger.LogInformation(report);
 
             await connection.SendAsync("SendTask", "SendSentiment",
                 _sentiment.GetSentimentLastLabel().ToString().ToLower());
-            
+
             await connection.SendAsync("SendTask", "SendGaugeSentiment", _sentiment.GetSentimentAbsolute().ToString());
             await connection.SendAsync("SendTask", "SendAverageSentimentLabel", _sentiment.GetSentimentAbsoluteLabel());
         }
