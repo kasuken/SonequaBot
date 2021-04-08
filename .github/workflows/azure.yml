@@ -1,0 +1,49 @@
+name: Bot Deploy
+
+env:
+  BINARIES: './output/app_data/jobs/continuous/SonequaBot.Discord'
+  ZIP_FILE: 'SonequaBot.Discord.zip'
+  ZIP_PATH: './output'
+  ZIP_FILEPATH: './output/SonequaBot.Discord.zip'
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Install dependencies
+      run: dotnet restore ./SonequaBot.Discord/SonequaBot.Discord.csproj
+    
+    - name: Set Discord Key
+      uses: deef0000dragon1/json-edit-action/@v1
+      env:
+        KEY: SonequaSettings.BotToken
+        VALUE: ${{ secrets.DISCORDTOKEN }}
+        FILE: ./SonequaBot.Discord/appsettings.json
+
+    - name: Build
+      run: dotnet build ./SonequaBot.Discord/SonequaBot.Discord.csproj --configuration Release --no-restore --output ${{env.BINARIES}}
+
+    - name: Zip
+      uses: nguyenquyhy/zip-release@v0.3.0
+      with:
+        filename: '${{env.ZIP_FILE}}'
+        workingDirectory:  ${{env.ZIP_PATH}}
+        exclusions: 'worker.exe app_data/**/unix/*'
+
+    - name: Deploy to Production
+      uses: srijken/azure-zip-deploy@v1.0.1
+      with:
+        zip-file: ${{env.ZIP_FILEPATH}}
+        publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE }}

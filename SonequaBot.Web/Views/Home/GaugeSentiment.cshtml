@@ -1,54 +1,59 @@
-﻿<canvas id="gaugeSentiment"></canvas>
-
+﻿<svg id="gaugeSentiment" width="90%" height="90%" style="margin-left: 5%;margin-right: 5%"></svg>
+<h5 id="gaugeSentimentLabel" style="text-align: center"></h5>
 @section scripts {
-    <script src="https://bernii.github.io/gauge.js/dist/gauge.min.js"></script>
 
     <script>
+        var percentColors = [
+            { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+            { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+            { pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } },
+        ];
 
-        //var connection = new signalR.HubConnectionBuilder().withUrl("/sonequaBotHub").build();
-
-        var opts = {
-            angle: -0.2, // The span of the gauge arc
-            lineWidth: 0.2, // The line thickness
-            radiusScale: 1, // Relative radius
-            pointer: {
-                length: 0.6, // // Relative to gauge radius
-                strokeWidth: 0.035, // The thickness
-                color: "#FFFFFF" // Fill color
-            },
-            limitMax: false, // If false, max value increases automatically if value > maxValue
-            limitMin: false, // If true, the min value of the gauge will be fixed
-            colorStart: "#6F6EA0", // Colors
-            colorStop: "#C0C0DB", // just experiment with them
-            strokeColor: "#EEEEEE", // to see which ones work best for you
-            generateGradient: true,
-            highDpiSupport: true,
-            percentColors: [
-                [0.0, "#a9d70b"],
-                [0.5, "#f9c802"],
-                [1.0, "#ff0000"]
-            ],
-            staticZones: [
-                { strokeStyle: "#F03E3E", min: -1, max: -0.4 }, // Red
-                { strokeStyle: "#FFDD00", min: -0.4, max: 0.4 }, // Yellow
-                { strokeStyle: "#30B32D", min: 0.4, max: 1 } // Green
-            ]
+        var getColorForPercentage = function (pct) {
+            for (var i = 1; i < percentColors.length - 1; i++) {
+                if (pct < percentColors[i].pct) {
+                    break;
+                }
+            }
+            var lower = percentColors[i - 1];
+            var upper = percentColors[i];
+            var range = upper.pct - lower.pct;
+            var rangePct = (pct - lower.pct) / range;
+            var pctLower = 1 - rangePct;
+            var pctUpper = rangePct;
+            var color = {
+                r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+                g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+                b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+            };
+            return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+            // or output as hex if preferred
         };
-        var target = document.getElementById("gaugeSentiment"); // your canvas element
-        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-        gauge.maxValue = 1; // set max gauge value
-        gauge.setMinValue(-1); // Prefer setter over gauge.minValue = 0
-        gauge.animationSpeed = 32; // set animation speed (32 is default value)
-        gauge.set(0); // set actual value
 
-        //connection.start().then(function () {
+        var config = liquidFillGaugeDefaultSettings();
+        config.minValue = 0;
+        config.maxValue = 100;
+        config.textVertPosition = 0.8;
+        config.waveAnimateTime = 5000;
+        config.waveHeight = 0.15;
+        config.waveAnimate = true;
+        config.waveOffset = 0.25;
+        config.valueCountUp = false;
+        config.displayPercent = true;
 
-        //}).catch(function (err) {
-        //    return console.error(err.toString());
-        //});
+        var gauge4 = loadLiquidFillGauge("gaugeSentiment", 50, config);
 
         connection.on("ReceiveGaugeSentiment", function (sentiment) {
-            gauge.set(sentiment);
-        });
+            var sentiment_value = Number(sentiment);
+            // normalize to 0~1
+            sentiment_value+=1;
+            sentiment_value/=2;
+                        
+            gauge4.update((sentiment_value * 100).toFixed(1), getColorForPercentage(sentiment_value));
+    });
+    
+    connection.on("ReceiveAverageSentimentLabel", function (sentimentLabel) {
+        document.getElementById("gaugeSentimentLabel").innerHTML = sentimentLabel;
+    });
     </script>
 }

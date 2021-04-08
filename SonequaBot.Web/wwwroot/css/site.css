@@ -10,3 +10,26 @@
     display: none;
     transform: translate(-50%, -50%);
 }
+
+.userAppear {
+    display: none;
+    animation: opacityOnAndOff 5s ease 10 normal;
+}
+
+#outputContainer img {
+    max-height: 100%;
+}
+
+@keyframes opacityOnAndOff {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
