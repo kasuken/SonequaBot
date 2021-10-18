@@ -2,7 +2,7 @@
 
 namespace SonequaBot.Shared.Commands
 {
-    public class CommandBuco : CommandBase, IResponseImage
+    public class CommandRovescia : CommandBase, IResponseImage
     {
         protected override string ActivationCommand => "!rovescia";
 
