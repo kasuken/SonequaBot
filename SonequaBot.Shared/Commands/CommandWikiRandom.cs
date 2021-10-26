@@ -1,16 +1,20 @@
-using Newtonsoft.Json.Linq;
-using SonequaBot.Shared.Commands.DTO;
-using SonequaBot.Shared.Commands.Interfaces.Responses;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-
 namespace SonequaBot.Shared.Commands
 {
+    using System;
+    using System.IO;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
+    using Newtonsoft.Json.Linq;
+    using SonequaBot.Shared.Commands.DTO;
+    using SonequaBot.Shared.Commands.Interfaces;
+    using SonequaBot.Shared.Commands.Interfaces.Responses;
+    
     public class CommandWikiRandom: CommandBase, IResponseImageCard
     {
         private const string ENDPOINT = "https://it.wikipedia.org/api/rest_v1/page/random/summary";
+
+        protected override CommandActivationComparison ActivationComparison => CommandActivationComparison.Contains;
 
         protected override string ActivationCommand => "!wikirandom";
         
