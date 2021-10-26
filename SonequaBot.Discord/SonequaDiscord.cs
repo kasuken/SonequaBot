@@ -102,6 +102,20 @@ namespace SonequaBot.Discord
                             await e.Channel.SendMessageAsync("", false, embed);
                         }
 
+                        if (command is IResponseImageCard messageCard)
+                        {
+                            var cardData = messageCard.GetImageCardEvent(source);
+
+                            var embed = new DiscordEmbedBuilder
+                            {
+                                Title = cardData.Title,
+                                Description = cardData.Description,
+                                ImageUrl = cardData.ImageUrl,
+                                Url = cardData.Url
+                            };
+                            await e.Channel.SendMessageAsync("", false, embed);
+                        }
+
                         return;
                     }
                 }
