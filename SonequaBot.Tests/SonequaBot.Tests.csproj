@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SonequaBot.Sentiment\SonequaBot.Sentiment.csproj" />
+        <ProjectReference Include="..\SonequaBot.Shared\SonequaBot.Shared.csproj" />
     </ItemGroup>
 
 </Project>
