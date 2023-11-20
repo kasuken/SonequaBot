@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
@@ -14,150 +8,156 @@ using SonequaBot.Shared;
 using SonequaBot.Shared.Commands;
 using SonequaBot.Shared.Commands.Interfaces;
 using SonequaBot.Shared.Commands.Interfaces.Responses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SonequaBot.Discord
 {
-    public class SonequaDiscord : BackgroundService
-    {
-        private DiscordClient _discordClient;
-        
-        public CommandsNextExtension _commands { get; set; }
+	public class SonequaDiscord : BackgroundService
+	{
+		private DiscordClient _discordClient;
 
-        private readonly ILogger<SonequaDiscord> _logger;
+		public CommandsNextExtension _commands { get; set; }
 
-        private readonly List<ICommand> BotCommands = new List<ICommand>(); 
+		private readonly ILogger<SonequaDiscord> _logger;
 
-        private readonly string[] BotUsers = {"sonequabot", "streamelements"};
-        
-        public SonequaDiscord(ILogger<SonequaDiscord> logger, SonequaSettings options)
-        {
-            _logger = logger;
+		private readonly List<ICommand> BotCommands = new List<ICommand>();
 
-            _discordClient = new DiscordClient(new DiscordConfiguration
-            {
-                Token = options.BotToken,
-                TokenType = TokenType.Bot,
-                MinimumLogLevel = LogLevel.Debug
-            });
+		private readonly string[] BotUsers = { "sonequabot", "streamelements" };
 
-            _commands = _discordClient.UseCommandsNext(new CommandsNextConfiguration()
-            {
-                UseDefaultCommandHandler = false
-            });
+		public SonequaDiscord(ILogger<SonequaDiscord> logger, SonequaSettings options)
+		{
+			_logger = logger;
 
-            InitializeBotCommands();
-            
-            _discordClient.MessageCreated += CommandHandler;
-            
-            _discordClient.ConnectAsync().GetAwaiter().GetResult();
-            Task.Delay(-1).GetAwaiter().GetResult();
-        }
+			_discordClient = new DiscordClient(new DiscordConfiguration
+			{
+				Token = options.BotToken,
+				TokenType = TokenType.Bot,
+				MinimumLogLevel = LogLevel.Debug
+			});
 
-        private async Task CommandHandler(DiscordClient client, MessageCreateEventArgs e)
-        {
-            var source = new CommandSource
-            {
-                Channel = e.Channel.Name,
-                Message = e.Message.Content,
-                User = e.Author.Username
-            };
+			_commands = _discordClient.UseCommandsNext(new CommandsNextConfiguration()
+			{
+				UseDefaultCommandHandler = false
+			});
 
-            if (Array.Exists(BotUsers, element => element.ToLowerInvariant() == source.User.ToLowerInvariant())) return;
+			InitializeBotCommands();
 
-            try
-            {
-                foreach (var command in BotCommands)
-                {
-                    if (command.IsActivated(source))
-                    {
-                        if (command is IResponseMessage messageText)
-                        {
-                            await e.Channel.SendMessageAsync(messageText.GetMessageEvent(source));
-                        }
+			_discordClient.MessageCreated += CommandHandler;
 
-                        if (command is IResponseImage messageImage)
-                        {
-                            var embed = new DiscordEmbedBuilder
-                            {
-                                ImageUrl = messageImage.GetImageEvent(source)
-                            };
-                            await e.Channel.SendMessageAsync("", false, embed);
-                        }
+			_discordClient.ConnectAsync().GetAwaiter().GetResult();
+			Task.Delay(-1).GetAwaiter().GetResult();
+		}
 
-                        if (command is IResponseVideo messageVideo)
-                        {
-                            var embed = new DiscordEmbedBuilder
-                            {
-                                Url = messageVideo.GetVideoEvent(source)
-                            };
-                            await e.Channel.SendMessageAsync("", false, embed);
-                        }
+		private async Task CommandHandler(DiscordClient client, MessageCreateEventArgs e)
+		{
+			var source = new CommandSource
+			{
+				Channel = e.Channel.Name,
+				Message = e.Message.Content,
+				User = e.Author.Username
+			};
 
-                        if (command is IResponseAudio messageAudio)
-                        {
-                            var embed = new DiscordEmbedBuilder
-                            {
-                                Url = messageAudio.GetAudioEvent(source)
-                            };
-                            await e.Channel.SendMessageAsync("", false, embed);
-                        }
+			if (Array.Exists(BotUsers, element => element.ToLowerInvariant() == source.User.ToLowerInvariant())) return;
 
-                        if (command is IResponseImageCard messageCard)
-                        {
-                            var cardData = messageCard.GetImageCardEvent(source);
+			try
+			{
+				foreach (var command in BotCommands)
+				{
+					if (command.IsActivated(source))
+					{
+						if (command is IResponseMessage messageText)
+						{
+							await e.Channel.SendMessageAsync(messageText.GetMessageEvent(source));
+						}
 
-                            var embed = new DiscordEmbedBuilder
-                            {
-                                Title = cardData.Title,
-                                Description = cardData.Description,
-                                ImageUrl = cardData.ImageUrl,
-                                Url = cardData.Url
-                            };
-                            await e.Channel.SendMessageAsync("", false, embed);
-                        }
+						if (command is IResponseImage messageImage)
+						{
+							var embed = new DiscordEmbedBuilder
+							{
+								ImageUrl = messageImage.GetImageEvent(source)
+							};
+							await e.Channel.SendMessageAsync("", embed);
+						}
 
-                        return;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                
-                await e.Channel.SendMessageAsync(ex.Message);
-            }
-        }
+						if (command is IResponseVideo messageVideo)
+						{
+							var embed = new DiscordEmbedBuilder
+							{
+								Url = messageVideo.GetVideoEvent(source)
+							};
+							await e.Channel.SendMessageAsync("", embed);
+						}
 
-        private void InitializeBotCommands()
-        {
-            List<Type> types = Assembly.Load("SonequaBot.Shared").GetTypes()
-                .Where(t => t.Namespace == "SonequaBot.Shared.Commands")
-                .ToList();
-            
-            foreach (Type fqcnType in types)
-            {
-                if (fqcnType.BaseType != null && fqcnType.BaseType == typeof(CommandBase))
-                {
-                    _logger.LogInformation("Load BotCommand : " +  fqcnType.ToString());
-                    BotCommands.Add((ICommand) Activator.CreateInstance(fqcnType));
-                }
-            }
-        }
+						if (command is IResponseAudio messageAudio)
+						{
+							var embed = new DiscordEmbedBuilder
+							{
+								Url = messageAudio.GetAudioEvent(source)
+							};
+							await e.Channel.SendMessageAsync("", embed);
+						}
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("SonequaBot is starting.");
+						if (command is IResponseImageCard messageCard)
+						{
+							var cardData = messageCard.GetImageCardEvent(source);
 
-            stoppingToken.Register(() => _logger.LogInformation("SonequaBot is stopping."));
+							var embed = new DiscordEmbedBuilder
+							{
+								Title = cardData.Title,
+								Description = cardData.Description,
+								ImageUrl = cardData.ImageUrl,
+								Url = cardData.Url
+							};
+							await e.Channel.SendMessageAsync("", embed);
+						}
 
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("SonequaBot is doing background work.");
+						return;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-            }
+				await e.Channel.SendMessageAsync(ex.Message);
+			}
+		}
 
-            _logger.LogInformation("SonequaBot background task is stopping.");
-        }
-    }
+		private void InitializeBotCommands()
+		{
+			List<Type> types = Assembly.Load("SonequaBot.Shared").GetTypes()
+				.Where(t => t.Namespace == "SonequaBot.Shared.Commands")
+				.ToList();
+
+			foreach (Type fqcnType in types)
+			{
+				if (fqcnType.BaseType != null && fqcnType.BaseType == typeof(CommandBase))
+				{
+					_logger.LogInformation("Load BotCommand : " + fqcnType.ToString());
+					BotCommands.Add((ICommand)Activator.CreateInstance(fqcnType));
+				}
+			}
+		}
+
+		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+		{
+			_logger.LogInformation("SonequaBot is starting.");
+
+			stoppingToken.Register(() => _logger.LogInformation("SonequaBot is stopping."));
+
+			while (!stoppingToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("SonequaBot is doing background work.");
+
+				await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+			}
+
+			_logger.LogInformation("SonequaBot background task is stopping.");
+		}
+	}
 }
